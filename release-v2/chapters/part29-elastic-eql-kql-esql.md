@@ -88,21 +88,21 @@ Elastic KQL is the query body Kibana's older **Lucene query syntax** predates an
 **Single-event query — the base case.** Targeting the same Sysmon-via-Elastic-Agent index as §2's KQL example:
 
 ```eql
-process where event.code == "10" and wildcard(winlog.event_data.TargetImage, "*\\lsass.exe") and
+process where event.code == "10" and winlog.event_data.TargetImage : "*\\lsass.exe" and
   winlog.event_data.GrantedAccess in ("0x1010", "0x1410", "0x1438", "0x143a", "0x1fffff") and
-  not wildcard(process.executable, "*\\MsMpEng.exe", "*\\WerFault.exe", "*\\Taskmgr.exe")
+  not (process.executable like "*\\MsMpEng.exe" or process.executable like "*\\WerFault.exe" or process.executable like "*\\Taskmgr.exe")
 ```
 
-This is functionally the same match as the Elastic KQL query in §2 — an EQL query with no `sequence` clause is a single-event filter, and for a single-event match like this, EQL buys you nothing over Elastic KQL except access to EQL-specific functions (string manipulation, `cidrMatch`, `wildcard()`) that some KQL versions don't expose. Note the syntax this actually forces: EQL's `:` and `in` operators perform exact (case-insensitive) matches only and do not accept wildcard patterns — matching `*\lsass.exe` needs the `wildcard()` function shown above (or the `like` keyword), not a bare `*` glob inline the way KQL allows. `in` is still the right operator for the `GrantedAccess` clause, because those values are exact, not wildcarded — see the False Positive Trap in §2 for why that clause is there at all. The category keyword (`process` above) must match one of the event categories your ECS mapping actually populates — using the wrong category returns zero matches with no error, the same silent-failure shape as the field-mapping gaps named in §1 and the False Positive Trap above.
+This is functionally the same match as the Elastic KQL query in §2 — an EQL query with no `sequence` clause is a single-event filter, and for a single-event match like this, EQL buys you nothing over Elastic KQL except access to EQL-specific functions (string manipulation, `cidrMatch`) that some KQL versions don't expose. Note the syntax this actually allows: EQL's `:` operator and its `like`/`like~` keywords natively support `*`/`?` glob wildcards, so matching `*\lsass.exe` needs nothing more than the `:` operator shown above (or an equivalent `like` clause) — the same bare `*` glob KQL allows. Only `==`/`!=` require an exact value; `in` is the list form of that exact match, which is why `in` — not `:` or `like` — is still the right operator for the `GrantedAccess` clause: those values are exact, not wildcarded — see the False Positive Trap in §2 for why that clause is there at all. The category keyword (`process` above) must match one of the event categories your ECS mapping actually populates — using the wrong category returns zero matches with no error, the same silent-failure shape as the field-mapping gaps named in §1 and the False Positive Trap above.
 
 **Sequence query — where EQL actually earns its keep.** It re-implements DET-23-01's core selection logic as the first stage of a sequence, then adds a second stage the canonical analytic itself does not require: the same process (joined on `process.entity_id`, Elastic's process-identity field, the rough ECS analogue of Sysmon's own `ProcessGuid`) making an outbound network connection within 5 minutes of the LSASS access. This models the "dump, then exfiltrate or relay" pattern and is exactly the kind of two-event, ordered, entity-joined correlation Elastic KQL structurally cannot express in one query.
 
 CONCEPTUAL SAMPLE — illustrative EQL, not validated against a live Elastic Security tenant; Part 24–29's own tested implementations of DET-23-01 use the plain single-event form above, not this sequence extension, which is a related but separate analytic (see §5).
 ```eql
 sequence by process.entity_id with maxspan=5m
-  [process where event.code == "10" and wildcard(winlog.event_data.TargetImage, "*\\lsass.exe") and
+  [process where event.code == "10" and winlog.event_data.TargetImage : "*\\lsass.exe" and
     winlog.event_data.GrantedAccess in ("0x1010", "0x1410", "0x1438", "0x143a", "0x1fffff") and
-    not wildcard(process.executable, "*\\MsMpEng.exe", "*\\WerFault.exe", "*\\Taskmgr.exe")]
+    not (process.executable like "*\\MsMpEng.exe" or process.executable like "*\\WerFault.exe" or process.executable like "*\\Taskmgr.exe")]
   [network where event.code == "3" and destination.ip != null]
 ```
 
