@@ -1,0 +1,11 @@
+flowchart LR
+    A["Raw event\n(sudo invocation, Windows log, API payload)"] --> B["Collector / forwarder"]
+    B --> C["Parser: field extraction\n+ schema mapping"]
+    C --> D["Normalized event\n(user.name, user.id, ...)"]
+    D --> E["Detection rule\n(e.g. DET-05-01)"]
+    C -. "per-field null-rate" .-> M1["Parser-health monitor"]
+    B -. "source count vs. parsed count" .-> M2["Ingestion-loss monitor"]
+    D -. "canary event heartbeat" .-> M3["Canary detector"]
+    M1 --> N["Alert: parser degraded"]
+    M2 --> N
+    M3 --> N

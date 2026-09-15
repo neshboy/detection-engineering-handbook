@@ -1,0 +1,11 @@
+flowchart TD
+    H["Hunt notebook (S3)<br/>HUNT-A6-01<br/>hypothesis -> finding"] -->|"documented finding names<br/>a coverage gap"| D["Detection file (S2)<br/>DET-A6-01<br/>full Part 22 metadata"]
+    D --> T["Detection test plan (S5)<br/>Part 37 taxonomy checklist"]
+    T --> R["Peer-review sign-off (S4)<br/>author != reviewer != merge-approver"]
+    R -->|"reviewer objection raised"| X["Tuning / exception request (S6)<br/>EX-A6-01"]
+    X --> R
+    R -->|"approved"| C["Change-request record (S7)<br/>CR-A6-01<br/>version bump + rollback plan"]
+    C --> P["Deployed<br/>(Part 22 Sec7 CI/CD, staged/canary)"]
+    P --> M["Monitoring:<br/>disposition data, alert volume"]
+    M -->|"FP/BP pattern emerges"| X
+    M -->|"missed behavior or new<br/>coverage gap found"| H

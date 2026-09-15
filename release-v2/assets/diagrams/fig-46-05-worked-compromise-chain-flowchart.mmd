@@ -1,0 +1,7 @@
+flowchart TB
+    A["Credential access\n(Part 17 phishing lure — invisible here)"] --> B["Authentication\nDET-13-04 (DCSync) + 4724 reset\n--> DET-46-01 fires (cloud sign-in)"]
+    B --> C["Privilege\nDET-18-01 (OAuth self-consent)\n--> DET-46-03 fires (cross-plane join)"]
+    C --> D["Discovery\nOn-prem AD group enum +\nGraph directory reads\n--> DET-46-04 fires"]
+    D --> E["Lateral movement\nIdentity reaches 11 endpoints,\nbaseline is 2\n--> DET-46-05 fires"]
+    E --> F["Data access\nMailbox read volume below\nstandalone threshold, but\n--> DET-46-06 fires on chain-weighted score"]
+    F --> G["Declared Incident\n(TERMINOLOGY.md: Incident)"]

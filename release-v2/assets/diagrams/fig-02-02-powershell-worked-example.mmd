@@ -1,0 +1,9 @@
+flowchart LR
+    A["Attacker action<br/>Phishing macro launches<br/>powershell.exe -enc base64blob"] --> B["OS / API call<br/>Win32 CreateProcess;<br/>kernel-level ETW process-creation event"]
+    B --> C["Artifact<br/>Process object + command line in memory;<br/>Prefetch / Amcache entries"]
+    C --> D["Log<br/>Sysmon Event ID 1,<br/>Event ID 4688,<br/>Event ID 4104 decoded script block"]
+    D --> E["Collector<br/>Winlogbeat / Splunk UF / EDR sensor<br/>reading local Windows Event Log channels"]
+    E --> F["Parser<br/>SIEM ingest pipeline maps<br/>EventData fields to raw fields"]
+    F --> G["Normalisation<br/>Mapped to a common schema<br/>e.g. process.command_line"]
+    G --> H["SIEM / lake<br/>Indexed and retained<br/>per retention policy"]
+    H --> I["Analytic<br/>DET-02-01 flags EncodedCommand plus<br/>high command-line length"]

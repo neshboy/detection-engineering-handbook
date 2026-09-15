@@ -1,0 +1,20 @@
+{
+  "title": "RDP connection-graph summary: expected star pattern vs. anomalous peer-to-peer pattern",
+  "event_type": "Connection-graph / NDR session-aggregation result, one representative row per source host over a 24-hour window, port 3389",
+  "fields": [
+    {"label": "SourceHost", "value": "WKS-ENG-0117 (10.20.22.44)"},
+    {"label": "HostRole (baseline)", "value": "Standard workstation, not a jump host"},
+    {"label": "DistinctRDPDestinations (24h)", "value": "9"},
+    {"label": "DestinationHostRoles", "value": "9 workstations, 0 servers, 0 jump hosts"},
+    {"label": "ExpectedPattern (segment baseline)", "value": "2 designated jump hosts each connect outbound to many workstations; workstations do not connect to each other"},
+    {"label": "NLA Negotiated", "value": "No (3 of 9 sessions)"},
+    {"label": "GraphClassification", "value": "Peer-to-peer cluster, anomalous"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "DistinctRDPDestinations (24h)", "explanation": "A workstation initiating RDP to nine other workstations is the anomalous peer-to-peer shape the section contrasts with the expected star pattern, where only jump hosts fan out to many targets."},
+    {"number": 2, "field_label": "DestinationHostRoles", "explanation": "None of the nine destinations are servers or the segment's designated jump hosts, which is what makes this off-baseline direction rather than ordinary administrative RDP traffic."},
+    {"number": 3, "field_label": "ExpectedPattern (segment baseline)", "explanation": "Stating the segment's normal 'few jump hosts, many targets' star topology alongside the observed row is what lets an analyst recognize the deviation without needing the full graph rendered."},
+    {"number": 4, "field_label": "NLA Negotiated", "explanation": "A subset of sessions negotiating down to a weaker security layer than the environment's baseline expects is the pre-encryption anomaly signal described alongside session fan-out in this section."}
+  ],
+  "note": "Illustrative and conceptual only, representing one row an underlying connection-graph visualization would be built from; not a rendered graph, captured NDR screenshot, or product interface."
+}

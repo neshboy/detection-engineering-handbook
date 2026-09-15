@@ -1,0 +1,20 @@
+{
+  "title": "DET-25-01 query result — OpenProcessApiCall match against lsass.exe",
+  "event_type": "Microsoft Defender for Endpoint Advanced Hunting, DeviceEvents table, ActionType = OpenProcessApiCall (result row from the §7.2 base query)",
+  "fields": [
+    {"label": "Timestamp", "value": "2026-09-14T03:41:07.214Z"},
+    {"label": "DeviceName", "value": "wkstn-test01.corp.local"},
+    {"label": "InitiatingProcessFileName", "value": "rundll32.exe"},
+    {"label": "InitiatingProcessCommandLine", "value": "rundll32.exe C:\\Windows\\System32\\comsvcs.dll, MiniDump 812 C:\\Windows\\Temp\\lsass.dmp full"},
+    {"label": "InitiatingProcessAccountName", "value": "j.torres"},
+    {"label": "FileName", "value": "lsass.exe"},
+    {"label": "GrantedAccess", "value": "0x1010"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "InitiatingProcessCommandLine", "explanation": "The comsvcs.dll MiniDump invocation is the exact Detection Test action from §7.2 — this full command line is what lets an analyst distinguish a deliberate LSASS dump from a benign process-access event, since InitiatingProcessFileName alone (rundll32.exe) is an extremely common LOLBin."},
+    {"number": 2, "field_label": "GrantedAccess", "explanation": "This value must be extracted via parse_json(AdditionalFields).GrantedAccess per the base query's extend step; §7.2 flags this extraction as unverified against a live tenant schema, unlike the Sysmon GrantedAccess value list in Part 24."},
+    {"number": 3, "field_label": "InitiatingProcessFileName", "explanation": "This is the field the base query's allowlist filters on (InitiatingProcessFileName !in~ (\"wmiprvse.exe\", \"svchost.exe\", \"MsMpEng.exe\")); the Blind Spot box in §7.2 notes this match is on name alone, with no path or hash check."},
+    {"number": 4, "field_label": "FileName", "explanation": "Confirms the accessed target is lsass.exe itself (matched case-insensitively via =~ in the base query), the field that scopes the whole query to LSASS-specific access rather than any process-access event."}
+  ],
+  "note": "Illustrative and conceptual only — this represents what a matching DeviceEvents row would look like in the Defender Advanced Hunting result grid; it is not a captured product screenshot, since this book's available lab evidence has no Defender for Endpoint-onboarded host."
+}

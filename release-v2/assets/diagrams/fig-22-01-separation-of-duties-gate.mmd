@@ -1,0 +1,11 @@
+flowchart LR
+    subgraph ROLES["Three distinct actors -- no overlap allowed"]
+        A["Author<br/>writes/edits the rule"]
+        B["Reviewer<br/>technical-adversarial review"]
+        C["Merge-approver<br/>release owner"]
+    end
+    A -->|"opens PR"| D["Pull request<br/>DET-22-01 v1.1.0"]
+    D -->|"requests review from"| B
+    B -->|"approval recorded<br/>in PR"| D
+    D -->|"merge gated by branch protection:<br/>author cannot self-approve,<br/>reviewer cannot also be merge-approver"| C
+    C -->|"merges to main"| E["main branch<br/>(release-eligible)"]

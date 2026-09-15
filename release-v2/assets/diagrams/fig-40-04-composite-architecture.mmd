@@ -1,0 +1,8 @@
+flowchart LR
+    A["Weak signal 1\n(e.g. keyword, UA string, country field)"] --> E["Composite score"]
+    B["Weak signal 2\n(baseline deviation -- Part 31)"] --> E
+    C["Weak signal 3\n(correlation across events -- Part 30)"] --> E
+    D["Weak signal 4\n(confidence/rarity input -- Part 32/33)"] --> E
+    E --> F{"Composite score\ncrosses threshold?"}
+    F -->|No| G["Logged only --\nfeeds baseline/TI history"]
+    F -->|Yes| H["Alert, with contributing\nsignals attached for triage"]

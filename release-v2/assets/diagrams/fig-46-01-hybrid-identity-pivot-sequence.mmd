@@ -1,0 +1,12 @@
+sequenceDiagram
+    participant Attacker
+    participant DC as On-prem DC (KDC)
+    participant Sync as Hybrid identity sync (e.g. Entra Connect)
+    participant Entra as Cloud IdP (Entra ID / equivalent)
+
+    Attacker->>DC: Privileged on-prem action already obtained<br/>(DCSync / forged ticket — Part 13 §5-6)
+    Attacker->>DC: Reset target user's on-prem password<br/>(Event ID 4724)
+    DC->>Sync: Password change queued for sync
+    Sync->>Entra: Expedited password-hash sync<br/>(typically minutes, not the default ~30 min cycle)
+    Attacker->>Entra: Authenticate as the target identity<br/>using the newly-set password
+    Entra->>Attacker: Session issued — SigninLogs shows a normal,<br/>policy-satisfied sign-in

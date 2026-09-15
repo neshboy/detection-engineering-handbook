@@ -1,0 +1,19 @@
+{
+  "title": "DAM-captured statement with resolved end-user identity and service account",
+  "event_type": "Database activity monitoring (DAM) console — captured statement detail view",
+  "fields": [
+    {"label": "Captured statement", "value": "SELECT * FROM customer_billing WHERE account_id = 88213"},
+    {"label": "Connection service account", "value": "app_service_account"},
+    {"label": "Resolved end-user identity", "value": "j.martinez@corp.example.com"},
+    {"label": "Session context", "value": "web-app session id b7f2-9c14, source app: billing-portal"},
+    {"label": "Client source IP", "value": "10.14.22.87 (application server, not end-user device)"},
+    {"label": "Database target", "value": "prod-billing-db.customer_billing"},
+    {"label": "Timestamp", "value": "2026-09-15T14:22:07Z"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "Connection service account", "explanation": "This is all a native audit log would show by itself — a shared service account, not the individual who triggered the query, illustrating the attribution gap the surrounding text describes."},
+    {"number": 2, "field_label": "Resolved end-user identity", "explanation": "This is the field a purpose-built DAM tool (or explicit application-layer pass-through) restores that connection pooling and native audit logs otherwise lose entirely."},
+    {"number": 3, "field_label": "Session context", "explanation": "Session context ties the resolved identity back to a specific application session, giving the analyst a way to correlate the statement with a specific user action rather than just a shared connection."}
+  ],
+  "note": "Illustrative/conceptual mockup of a DAM vendor console statement-detail view; not a captured screenshot of any real vendor product."
+}

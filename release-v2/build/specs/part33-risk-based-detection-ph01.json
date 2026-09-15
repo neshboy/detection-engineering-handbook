@@ -1,0 +1,19 @@
+{
+  "title": "Honeynet analyst session view — possible_success attack session",
+  "event_type": "Honeynet correlation platform, attack_sessions record rendered as an analyst-facing session view, status possible_success",
+  "fields": [
+    { "label": "Session ID", "value": "d48b795e-7c31-4a1e-9f02-6b8e1d3a55c9" },
+    { "label": "Source IP", "value": "16.5.0.236" },
+    { "label": "Target System", "value": "CT103 honeynet decoy web service" },
+    { "label": "Status", "value": "possible_success" },
+    { "label": "MITRE Techniques", "value": "T1595, T1046, T1083, T1190" },
+    { "label": "Stage Timeline", "value": "recon (02:10:04Z) -> probe (02:10:41Z) -> exploit_attempt (02:11:03Z) -> possible_success (02:11:52Z)" },
+    { "label": "Last Seen", "value": "2026-09-15T02:11:52Z" }
+  ],
+  "callouts": [
+    { "number": 1, "field_label": "Status", "explanation": "possible_success is the platform's own status field showing the session progressed past a bare exploit attempt to continued post-attempt activity from the same source." },
+    { "number": 2, "field_label": "Stage Timeline", "explanation": "Each transition (recon -> probe -> exploit_attempt -> possible_success) is a separate correlation decision joining events on the same source-to-target pairing within a bounded window, per Part 30." },
+    { "number": 3, "field_label": "MITRE Techniques", "explanation": "The technique set accumulates across the session rather than resetting per event, showing the full breadth of observed behavior (T1595, T1046, T1083, T1190) an analyst would triage at once." }
+  ],
+  "note": "Illustrative/conceptual rendering of what an analyst-facing session view would show for this real correlated session; not a captured screenshot of the honeynet platform's actual UI or any other product interface."
+}

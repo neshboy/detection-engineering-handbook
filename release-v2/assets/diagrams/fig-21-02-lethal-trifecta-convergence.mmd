@@ -1,0 +1,7 @@
+flowchart TD
+    A["Access to private/sensitive data<br/>(file store, database, mailbox)"] --> D{"All three present<br/>in one session?"}
+    B["Exposure to untrusted content<br/>(fetched web page, retrieved doc,<br/>externally-authored email body)"] --> D
+    C["Capability to communicate externally<br/>(send_email, http_post, create_invite)"] --> D
+    D -->|Yes| E["High-risk session: an exfiltration<br/>path exists, regardless of whether<br/>an attack has actually occurred"]
+    D -->|No| F["Lower risk: at least one leg<br/>of the chain is missing"]
+    E --> G["DET-21-05: session-level trifecta scoring"]

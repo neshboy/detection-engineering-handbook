@@ -1,0 +1,9 @@
+flowchart LR
+    A["Coverage Matrix row<br/>(A7 §2) — tier + named gap"] --> B["Telemetry-Source Matrix<br/>(A7 §3) — is the gap a source problem?"]
+    B -->|"source degraded<br/>or missing"| C["Visibility Debt<br/>(Detection Debt ledger, Part 43)"]
+    B -->|"source is adequate"| D["QA Checklists<br/>(A7 §4) — Detection Test,<br/>FP review, FN review"]
+    D -->|"test fails or<br/>FN confirmed"| E["Tuning or new analytic<br/>(Part 38 / Part 39)"]
+    E --> A
+    C --> A
+    D -->|"finding needs a new<br/>diagram or screenshot"| F["Visual-Asset Matrix<br/>(A7 §5) — render/capture status"]
+    F --> G["VISUAL-INVENTORY.md"]

@@ -1,0 +1,20 @@
+{
+  "title": "Process-creation event for destructive VSS deletion (vssadmin.exe)",
+  "event_type": "Sysmon Event ID 1 (Process Create) / Defender for Endpoint DeviceProcessEvents",
+  "fields": [
+    {"label": "Timestamp", "value": "2026-09-15T03:14:07.221Z"},
+    {"label": "DeviceName", "value": "CORP-FS02"},
+    {"label": "AccountName", "value": "svc-helpdesk"},
+    {"label": "FileName", "value": "vssadmin.exe"},
+    {"label": "ProcessCommandLine", "value": "vssadmin.exe delete shadows /all /quiet"},
+    {"label": "InitiatingProcessFileName", "value": "cmd.exe"},
+    {"label": "InitiatingProcessAccountName", "value": "svc-helpdesk"},
+    {"label": "InitiatingProcessParentFileName", "value": "powershell.exe"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "ProcessCommandLine", "explanation": "Contains the destructive verb 'delete shadows' that DET-45-01 matches on, distinguishing this from benign vssadmin.exe list/create invocations."},
+    {"number": 2, "field_label": "InitiatingProcessFileName", "explanation": "cmd.exe is not on the backup-agent allowlist (veeam.backup.service.exe, wbengine.exe), so this event is not excluded by DET-45-01's parent-process filter."},
+    {"number": 3, "field_label": "AccountName", "explanation": "A helpdesk service account invoking a destructive VSS command from an interactive-looking shell chain is inconsistent with that account's normal automated-ticketing baseline."}
+  ],
+  "note": "Illustrative and conceptual only, reconstructed from the Detection Test procedure in section 6.1; not a captured screenshot from any real Windows host or product interface."
+}

@@ -1,0 +1,18 @@
+{
+  "title": "DET-45-04 aggregation result: mass file-modification rate by a single process",
+  "event_type": "Defender for Endpoint DeviceFileEvents — KQL query result row (5-minute bin)",
+  "fields": [
+    {"label": "bin(Timestamp, 5m)", "value": "2026-09-15T03:20:00Z"},
+    {"label": "DeviceName", "value": "CORP-FS02"},
+    {"label": "InitiatingProcessFileName", "value": "svchost_update.exe"},
+    {"label": "InitiatingProcessAccountName", "value": "CORP\\jdoe"},
+    {"label": "FileEventCount", "value": "487"},
+    {"label": "DistinctFolders", "value": "34"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "FileEventCount", "explanation": "487 exceeds the 200-event threshold in a single 5-minute bin, the volume side of DET-45-04's behavioral condition."},
+    {"number": 2, "field_label": "DistinctFolders", "explanation": "34 distinct folders exceeds the 10-folder breadth threshold, indicating the activity spans a broad set of directories rather than one localized bulk-edit job."},
+    {"number": 3, "field_label": "InitiatingProcessFileName", "explanation": "An unrecognized process name not present on the exclusion list (backup-agent.exe, indexer.exe, onedrive.exe), so this row is not filtered out before the threshold check."}
+  ],
+  "note": "Illustrative and conceptual only, representing an expected query-result row from the Detection Test in section 7.1; not a captured screenshot from any real Sentinel or Defender console."
+}

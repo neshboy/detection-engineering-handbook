@@ -1,0 +1,8 @@
+flowchart LR
+    A["Kernel/ETW event\n(e.g., NtCreateUserProcess)"] --> B["Sysmon minifilter driver\n(kernel mode)"]
+    B --> C["Sysmon service\n(Sysmon64.exe, user mode)\napplies loaded XML config"]
+    C -->|"event matches an\nactive include rule"| D["Microsoft-Windows-Sysmon/Operational\nevent log channel"]
+    C -->|"event matches an\nexclude rule, or no\ninclude rule at all"| X["Discarded — never written\nto any log, unrecoverable"]
+    D --> E["Forwarder / log shipper\n(WEF, agent, Splunk UF)"]
+    E --> F["SIEM / lake\n(parsed, normalised — see Part 5, Part 6)"]
+    F --> G["Detection Rule evaluates\n(e.g., DET-09-01)"]

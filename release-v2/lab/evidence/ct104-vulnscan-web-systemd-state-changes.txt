@@ -1,0 +1,54 @@
+================================================================================
+SOURCE HOST/CONTAINER : CT104 "vulnscan" (vulnerability-scanner platform)
+COMMAND USED          : pct exec 104 -- bash -c "journalctl -u vulnscan-web --no-pager | grep -i -E 'Started|Stopped|Starting|Stopping|Deactivated' | tail -n 30"
+                        (via python C:/Users/User/proxmox_docs_helper.py guest 104 "journalctl -u vulnscan-web --no-pager | grep -i -E 'Started|Stopped|Starting|Stopping|Deactivated' | tail -n 30")
+CAPTURE TIMESTAMP     : 2026-09-15T08:36:46Z (capture run); log lines span 2026-09-09
+                        through 2026-09-10
+EVIDENCE TYPE         : REAL LAB EXAMPLE (genuine pre-existing systemd journal for a
+                        real application unit, vulnscan-web.service)
+TELEMETRY CATEGORY    : (3) systemd service state changes - Starting/Started/Stopping/
+                        Stopped/Deactivated transitions for a real user-defined service
+NOTES                 : "vulnscan-web.service" is the FastAPI/uvicorn dashboard for the
+                        vulnscan platform (see /opt/vulnscan/systemd/vulnscan-web.service
+                        on this host). Log shows several legitimate restart cycles
+                        (e.g. during iterative development/deploys) each producing the
+                        canonical Stopping -> Deactivated -> Stopped -> Starting ->
+                        Started sequence, plus the uvicorn worker process announcing
+                        itself and kicking off an intel-data catch-up update on boot.
+================================================================================
+
+Sep 09 19:26:06 vulnscan systemd[1]: vulnscan-web.service: Deactivated successfully.
+Sep 09 19:26:06 vulnscan systemd[1]: Stopped vulnscan-web.service - Vulnerability Scanner Dashboard (web).
+Sep 09 19:26:07 vulnscan systemd[1]: Starting vulnscan-web.service - Vulnerability Scanner Dashboard (web)...
+Sep 09 19:26:07 vulnscan systemd[1]: Started vulnscan-web.service - Vulnerability Scanner Dashboard (web).
+Sep 09 19:43:09 vulnscan systemd[1]: Stopping vulnscan-web.service - Vulnerability Scanner Dashboard (web)...
+Sep 09 19:43:09 vulnscan systemd[1]: vulnscan-web.service: Deactivated successfully.
+Sep 09 19:43:09 vulnscan systemd[1]: Stopped vulnscan-web.service - Vulnerability Scanner Dashboard (web).
+Sep 09 19:43:09 vulnscan systemd[1]: Starting vulnscan-web.service - Vulnerability Scanner Dashboard (web)...
+Sep 09 19:43:09 vulnscan systemd[1]: Started vulnscan-web.service - Vulnerability Scanner Dashboard (web).
+Sep 09 23:56:03 vulnscan systemd[1]: Starting vulnscan-web.service - Vulnerability Scanner Dashboard (web)...
+Sep 09 23:56:03 vulnscan systemd[1]: Started vulnscan-web.service - Vulnerability Scanner Dashboard (web).
+Sep 10 01:14:11 vulnscan systemd[1]: Stopping vulnscan-web.service - Vulnerability Scanner Dashboard (web)...
+Sep 10 01:14:11 vulnscan systemd[1]: vulnscan-web.service: Deactivated successfully.
+Sep 10 01:14:11 vulnscan systemd[1]: Stopped vulnscan-web.service - Vulnerability Scanner Dashboard (web).
+Sep 10 01:14:11 vulnscan systemd[1]: Starting vulnscan-web.service - Vulnerability Scanner Dashboard (web)...
+Sep 10 01:14:11 vulnscan systemd[1]: Started vulnscan-web.service - Vulnerability Scanner Dashboard (web).
+Sep 10 01:23:28 vulnscan systemd[1]: Stopping vulnscan-web.service - Vulnerability Scanner Dashboard (web)...
+Sep 10 01:23:28 vulnscan systemd[1]: vulnscan-web.service: Deactivated successfully.
+Sep 10 01:23:28 vulnscan systemd[1]: Stopped vulnscan-web.service - Vulnerability Scanner Dashboard (web).
+Sep 10 01:23:28 vulnscan systemd[1]: Starting vulnscan-web.service - Vulnerability Scanner Dashboard (web)...
+Sep 10 01:23:28 vulnscan systemd[1]: Started vulnscan-web.service - Vulnerability Scanner Dashboard (web).
+
+Additional context lines from the same journal (uvicorn worker output, not matched by
+the grep above but included for readability since they were part of the raw window
+originally captured):
+
+Sep 09 19:26:07 vulnscan uvicorn[1290]: INFO:     Started server process [1290]
+Sep 09 19:26:07 vulnscan uvicorn[1290]: 2026-09-09 19:26:07,446 INFO [vulnscan.intel.staleness] Intelligence data is NEVER_UPDATED on boot -- starting an immediate catch-up update
+Sep 09 19:26:07 vulnscan uvicorn[1290]: 2026-09-09 19:26:07,548 INFO [vulnscan.intel.update_engine] Intelligence update run 2 starting (trigger=boot_catchup)
+Sep 09 19:34:47 vulnscan uvicorn[1290]: 2026-09-09 19:34:47,830 INFO [vulnscan.intel.update_engine] Intelligence update run 3 starting (trigger=manual)
+Sep 09 19:43:10 vulnscan uvicorn[1901]: INFO:     Started server process [1901]
+Sep 09 23:56:16 vulnscan uvicorn[201]: INFO:     Started server process [201]
+Sep 09 23:59:26 vulnscan uvicorn[201]: 2026-09-09 23:59:26,882 INFO [vulnscan.intel.update_engine] Intelligence update run 5 starting (trigger=manual)
+Sep 10 01:14:12 vulnscan uvicorn[962]: INFO:     Started server process [962]
+Sep 10 01:23:28 vulnscan uvicorn[1304]: INFO:     Started server process [1304]

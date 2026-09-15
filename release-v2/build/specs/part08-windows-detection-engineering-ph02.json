@@ -1,0 +1,19 @@
+{
+  "title": "Event ID 4688 process creation — CommandLine field presence by audit GPO state",
+  "event_type": "Security channel, EventID 4688 (A new process has been created), 'Include command line in process creation events' GPO enabled vs. disabled",
+  "fields": [
+    { "label": "SubjectUserName", "value": "CORP\\jdoe" },
+    { "label": "NewProcessName", "value": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" },
+    { "label": "NewProcessId", "value": "0x1a3c" },
+    { "label": "CreatorProcessName", "value": "C:\\Windows\\System32\\cmd.exe" },
+    { "label": "CommandLine (GPO enabled)", "value": "powershell.exe -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQA..." },
+    { "label": "CommandLine (GPO disabled)", "value": "(field absent — event contains no command-line data at all)" },
+    { "label": "TokenElevationType", "value": "%%1936 (Limited)" }
+  ],
+  "callouts": [
+    { "number": 1, "field_label": "CommandLine (GPO enabled)", "explanation": "This is the only place the full invoked command — including a suspicious -enc argument — is visible, and it exists solely because the 'Include command line in process creation events' GPO is turned on." },
+    { "number": 2, "field_label": "CommandLine (GPO disabled)", "explanation": "With the GPO off, this exact same process launch produces a 4688 with no command-line data whatsoever — the malicious argument is invisible to anyone relying on native logging alone." },
+    { "number": 3, "field_label": "NewProcessName", "explanation": "Always present regardless of GPO state, but by itself only tells you powershell.exe ran — not what it was told to do." }
+  ],
+  "note": "Conceptual/illustrative side-by-side field breakdown of the same 4688 event with the command-line GPO enabled versus disabled; not a captured screenshot of Event Viewer or any product interface."
+}

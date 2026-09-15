@@ -1,0 +1,4 @@
+flowchart LR
+    A["4624 / 4672<br/>Security log<br/>(TargetLogonId)"] -->|"same Computer,<br/>same time window"| B["Sysmon Event ID 1<br/>(ProcessGuid,<br/>CommandLine)"]
+    B -->|"same ScriptBlockId<br/>-linked process,<br/>same time window"| C["4104<br/>PowerShell operational log<br/>(ScriptBlockText)"]
+    A -.->|"LogonType field"| D["Logon Type table<br/>(§3 of this appendix)"]

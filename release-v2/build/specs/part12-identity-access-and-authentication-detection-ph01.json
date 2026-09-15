@@ -1,0 +1,21 @@
+{
+  "title": "Entra ID sign-in log detail record",
+  "event_type": "Entra ID SigninLogs schema, single sign-in event detail view",
+  "fields": [
+    {"label": "UserPrincipalName", "value": "j.alvarez@contoso.com"},
+    {"label": "ResultType", "value": "50126"},
+    {"label": "IPAddress", "value": "185.220.101.47"},
+    {"label": "LocationDetails.countryOrRegion", "value": "RO"},
+    {"label": "DeviceDetail.trustType", "value": "Not Registered"},
+    {"label": "AuthenticationRequirement", "value": "multiFactorAuthentication"},
+    {"label": "ConditionalAccessStatus", "value": "failure"},
+    {"label": "AppDisplayName", "value": "Office 365 Exchange Online"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "ResultType", "explanation": "Non-zero result codes like 50126 (invalid username or password) distinguish a bad-credential attempt from other failure classes such as expired accounts or conditional-access denials that also produce non-zero codes."},
+    {"number": 2, "field_label": "IPAddress", "explanation": "The primary pivot for volumetric brute-force and spray detections, even though it's cheap for an attacker to rotate via proxy or VPN infrastructure."},
+    {"number": 3, "field_label": "ConditionalAccessStatus", "explanation": "Shows whether policy evaluation (including MFA) blocked the sign-in, which is the field that separates a merely failed password attempt from one that was also denied by conditional access."},
+    {"number": 4, "field_label": "DeviceDetail.trustType", "explanation": "Only populated when device registration or Intune enrollment is turned on; an unregistered device on a sensitive app is a common new-device/account-takeover signal."}
+  ],
+  "note": "Conceptual and illustrative only — a synthetic reconstruction of the SigninLogs field layout described in the table above, not a captured screenshot of any vendor console."
+}

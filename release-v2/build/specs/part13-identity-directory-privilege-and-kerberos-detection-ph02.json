@@ -1,0 +1,21 @@
+{
+  "title": "Directory replication extended right exercised by a non-domain-controller principal",
+  "event_type": "Windows Security channel, Event ID 4662 (An operation was performed on an object), Directory Service Access audit against the domain object",
+  "fields": [
+    {"label": "SubjectUserName", "value": "CORP\\jsmith"},
+    {"label": "SubjectUserSid", "value": "S-1-5-21-3623811015-3361044348-30300820-1104"},
+    {"label": "ObjectName", "value": "DC=corp,DC=local"},
+    {"label": "ObjectType", "value": "domainDNS"},
+    {"label": "Properties", "value": "{1131f6ad-9c07-11d1-f79f-00c04fc2dcd2} (DS-Replication-Get-Changes-All)"},
+    {"label": "AccessMask", "value": "0x100 (Control Access)"},
+    {"label": "IpAddress", "value": "10.12.4.55"},
+    {"label": "Match against DomainControllerInventory", "value": "No matching entry — SubjectUserSid is not a domain controller computer account"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "SubjectUserName", "explanation": "A standard domain user account exercising a right that should only be held and used by domain controller computer accounts and a small documented set of sync/backup principals — this is the core anomaly the DET-13-04 query pivots on."},
+    {"number": 2, "field_label": "Properties", "explanation": "Contains the DS-Replication-Get-Changes-All GUID, the specific extended right that lets a principal request replicated account data — including password hashes — exactly as a domain controller would."},
+    {"number": 3, "field_label": "Match against DomainControllerInventory", "explanation": "The requesting principal has no entry in the maintained inventory of expected domain controller identities, which is what separates this event from the routine replication traffic every real domain controller generates continuously."},
+    {"number": 4, "field_label": "IpAddress", "explanation": "A workstation-range address rather than a known domain controller's address, reinforcing that the request did not originate from real DC-to-DC replication infrastructure."}
+  ],
+  "note": "Conceptual and illustrative only, built to match the DET-13-04 detection logic described in the surrounding text — not a captured screenshot from a real domain controller or any product interface."
+}

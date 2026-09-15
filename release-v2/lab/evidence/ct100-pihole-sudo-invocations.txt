@@ -1,0 +1,33 @@
+================================================================================
+SOURCE HOST/CONTAINER : CT100 "pihole" (Pi-hole DNS/DHCP)
+COMMAND USED          : pct exec 100 -- bash -c "grep -i 'sudo' /var/log/auth.log | tail -n 40"
+                        (via python C:/Users/User/proxmox_docs_helper.py guest 100 "grep -i 'sudo' /var/log/auth.log 2>&1 | tail -n 40")
+CAPTURE TIMESTAMP     : 2026-09-15T08:36:46Z (capture run); log lines span 2026-06-17
+                        through 2026-08-17
+EVIDENCE TYPE         : REAL LAB EXAMPLE (genuine pre-existing auth.log entries)
+TELEMETRY CATEGORY    : (2) sudo command invocation - invoking user, target user, and
+                        exact command are all visible
+NOTES                 : Shows root invoking sudo to run commands as both the `pihole`
+                        service account (gravity.sh --force, a real Pi-hole blocklist
+                        update) and as root itself (ss -tulpn, pihole-FTL --config).
+                        Good example of legitimate/expected admin sudo activity for
+                        baselining against anomalous sudo use.
+================================================================================
+
+Jun 17 09:40:23 pihole sudo[4161]:     root : TTY=pts/1 ; PWD=/root ; USER=pihole ; COMMAND=/usr/bin/bash /opt/pihole/gravity.sh --force
+Jun 17 09:40:23 pihole sudo[4161]: pam_limits(sudo:session): Could not set limit for 'core' to soft=0, hard=-1: Operation not permitted; uid=0,euid=0
+Jun 17 09:40:23 pihole sudo[4161]: pam_unix(sudo:session): session opened for user pihole(uid=999) by (uid=0)
+Jun 17 09:40:30 pihole sudo[4161]: pam_unix(sudo:session): session closed for user pihole
+-- Boot 0f503d6614c64cebacbe41e49aba0346 --
+Jul 07 11:54:58 pihole sudo[33546]:     root : TTY=pts/1 ; PWD=/root ; USER=root ; COMMAND=/usr/bin/ss -tulpn
+Jul 07 11:54:58 pihole sudo[33546]: pam_limits(sudo:session): Could not set limit for 'core' to soft=0, hard=-1: Operation not permitted; uid=0,euid=0
+Jul 07 11:54:58 pihole sudo[33546]: pam_unix(sudo:session): session opened for user root(uid=0) by (uid=0)
+Jul 07 11:54:58 pihole sudo[33546]: pam_unix(sudo:session): session closed for user root
+Jul 13 14:22:20 pihole sudo[51654]:     root : TTY=pts/1 ; PWD=/root ; USER=root ; COMMAND=/usr/bin/ss -tulpn
+Jul 13 14:22:20 pihole sudo[51654]: pam_limits(sudo:session): Could not set limit for 'core' to soft=0, hard=-1: Operation not permitted; uid=0,euid=0
+Jul 13 14:22:20 pihole sudo[51654]: pam_unix(sudo:session): session opened for user root(uid=0) by (uid=0)
+Jul 13 14:22:20 pihole sudo[51654]: pam_unix(sudo:session): session closed for user root
+Aug 17 15:28:38 pihole sudo[143836]:     root : TTY=pts/1 ; PWD=/root ; USER=root ; COMMAND=/usr/bin/pihole-FTL --config
+Aug 17 15:28:38 pihole sudo[143836]: pam_limits(sudo:session): Could not set limit for 'core' to soft=0, hard=-1: Operation not permitted; uid=0,euid=0
+Aug 17 15:28:38 pihole sudo[143836]: pam_unix(sudo:session): session opened for user root(uid=0) by (uid=0)
+Aug 17 15:28:38 pihole sudo[143836]: pam_unix(sudo:session): session closed for user root

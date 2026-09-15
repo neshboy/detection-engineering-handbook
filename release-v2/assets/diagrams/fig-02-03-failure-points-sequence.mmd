@@ -1,0 +1,19 @@
+sequenceDiagram
+    participant Attacker
+    participant OS as Windows OS slash Kernel
+    participant EvtLog as Windows Event Log
+    participant Collector
+    participant Parser as SIEM Parser
+    participant Lake as SIEM slash Lake
+    participant Analytic
+
+    Attacker->>OS: Executes powershell.exe -enc base64blob
+    OS->>EvtLog: Kernel and PowerShell engine write Sysmon 1, 4688, 4104
+    Note over OS,EvtLog: Blind Spot -- without Sysmon or command-line auditing GPO, 4688 exists with no CommandLine field at all
+    EvtLog->>Collector: Forwarded via WEF or an installed agent
+    Note over EvtLog,Collector: Engineering Reality -- WEF subscription lag or agent buffer overflow under load can drop events silently
+    Collector->>Parser: Raw event shipped to ingest pipeline
+    Note over Collector,Parser: Schema drift breaks field extraction with zero ingest error
+    Parser->>Lake: Field mapped to common schema, indexed
+    Lake->>Analytic: Rule evaluates against normalised event
+    Analytic->>Analytic: DET-02-01 fires if pattern matches

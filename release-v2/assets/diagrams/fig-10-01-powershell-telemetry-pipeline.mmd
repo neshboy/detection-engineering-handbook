@@ -1,0 +1,17 @@
+flowchart LR
+    A["PowerShell engine invoked<br/>(powershell.exe / pwsh.exe)"] --> B["Script text parsed"]
+    B --> C["AMSI scan request<br/>(amsi.dll -> registered engine)"]
+    C -->|clean or bypassed| D["Script block executes"]
+    D --> E["4103: pipeline/cmdlet detail"]
+    D --> F["4104: script block text"]
+    D --> G["Outbound network call<br/>(cradle fetch)"]
+    G --> H["DNS query"]
+    G --> I["TCP/TLS connection"]
+    E --> J["Microsoft-Windows-PowerShell/Operational log"]
+    F --> J
+    H --> K["DNS query log"]
+    I --> L["Firewall / NDR connection log"]
+    J --> M["SIEM: joined on host + time + ProcessGuid"]
+    K --> M
+    L --> M
+    M --> N["DET-10-01 / DET-10-02"]

@@ -1,0 +1,12 @@
+flowchart TD
+    A["Real attacker behavior\nobserved or reported"] --> B["One cheap, discriminating-looking\nfield identified"]
+    B --> C["Single-field, single-threshold\nfilter written"]
+    C --> D["Design review approves:\ncheap, explainable, matches intuition"]
+    D --> E["Deployed to production"]
+    E --> F{"What does production\nactually look like?"}
+    F -->|"Field is also produced by\nordinary legitimate activity"| G["False positive flood --\ntuned into an allowlist, or ignored"]
+    F -->|"Real attacker activity sits below\nthe threshold or avoids the field"| H["False negative blind spot --\nattacker undetected"]
+    G --> I["Detection Autopsy:\nname the mechanism, not just the symptom"]
+    H --> I
+    I --> J["Add baseline (Part 31),\ncorrelation (Part 30), or\nconfidence/rarity (Part 32/33)"]
+    J --> K["Revised multi-signal analytic"]

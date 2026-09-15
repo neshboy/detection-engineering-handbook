@@ -1,0 +1,7 @@
+flowchart TD
+    R["Coverage matrix row: tier, last_validated, owner"] --> S{"today minus last_validated exceeds tier's recency window?"}
+    S -->|"no"| T["Row stands at recorded tier"]
+    S -->|"yes"| U["DET-41-01 fires: staleness alert to the row's owner"]
+    U --> V{"re-validated within SLA?"}
+    V -->|"yes"| W["last_validated refreshed; tier confirmed or adjusted from new evidence"]
+    V -->|"no"| X["Row auto-demoted one tier; heatmap cell recolors on its own"]

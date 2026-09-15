@@ -1,0 +1,16 @@
+flowchart LR
+    subgraph AWS["AWS"]
+    A1["API call"] --> A2["CloudTrail<br/>management events: default, free<br/>data events: opt-in, billed"]
+    A2 --> A3["S3 delivery bucket<br/>~15 min typical, no SLA"]
+    end
+    subgraph Azure["Azure"]
+    B1["ARM / control-plane call"] --> B2["Activity Log<br/>subscription-level: automatic"]
+    B2 --> B3["Diagnostic setting<br/>resource data-plane: per-resource, manual"]
+    end
+    subgraph GCP["GCP"]
+    C1["API call"] --> C2["Cloud Audit Logs<br/>Admin Activity: always on, free<br/>Data Access: opt-in, billed"]
+    end
+    A3 --> D["Log forwarder / SIEM ingestion"]
+    B3 --> D
+    C2 --> D
+    D --> E["Detection rules<br/>DET-19-01 .. DET-19-06"]

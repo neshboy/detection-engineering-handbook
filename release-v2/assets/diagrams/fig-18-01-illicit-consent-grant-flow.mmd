@@ -1,0 +1,16 @@
+sequenceDiagram
+    participant Attacker
+    participant Victim
+    participant IdP as Identity Provider (Entra ID / Okta / Workspace)
+    participant API as Resource API (Mail, Files, Calendar)
+
+    Attacker->>Attacker: Register malicious OAuth app,<br/>request broad delegated scope
+    Attacker->>Victim: Phishing email with consent link<br/>(app impersonates a familiar tool)
+    Victim->>IdP: Authenticate (password + MFA, satisfied normally)
+    IdP->>Victim: Present consent prompt for requested scope
+    Victim->>IdP: Grant consent
+    IdP->>Attacker: Issue refresh token for granted scope
+    loop Ongoing, survives password reset
+        Attacker->>API: Call resource API using refresh token
+        API->>Attacker: Return mail / files / calendar data
+    end

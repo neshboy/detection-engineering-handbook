@@ -1,0 +1,18 @@
+{
+  "title": "OAuth application consent prompt requesting mailbox-read/write access",
+  "event_type": "OAuth delegated-permission consent prompt, illustrating the disclosure language a user sees when an application requests a Mail.ReadWrite-equivalent scope (§7, OAuth consent-grant abuse)",
+  "fields": [
+    {"label": "Application name", "value": "\"Invoice Sync Pro\""},
+    {"label": "Publisher", "value": "Unverified publisher — publisher domain not confirmed"},
+    {"label": "Requested scope (technical)", "value": "Mail.ReadWrite"},
+    {"label": "Permission disclosure text (user-facing)", "value": "\"Read, update, create, and delete email in your mailbox\""},
+    {"label": "Additional requested scope", "value": "offline_access — \"Maintain access to data you have given it access to\""},
+    {"label": "Consent action", "value": "[Accept] / [Cancel] presented to the signed-in user"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "Publisher", "explanation": "An unverified-publisher badge is the single strongest visual cue at consent time that this app hasn't been reviewed by the platform vendor — the point §7 makes about the consent screen being the last real chance to stop this attack path."},
+    {"number": 2, "field_label": "Permission disclosure text (user-facing)", "explanation": "The plain-language text is where most users actually make the approve/deny decision, not the technical scope name — 'read, update, create, and delete' is the same access DET-17-03's query flags via the Mail.ReadWrite/Mail.Read/Mail.Send scope list."},
+    {"number": 3, "field_label": "Additional requested scope", "explanation": "offline_access is what lets the resulting token keep working after the user's browser session ends, which is exactly why this attack path survives a password reset — the token itself, not a session cookie, carries the access forward."}
+  ],
+  "note": "This is a conceptual, illustrative mockup of consent-prompt disclosure language for teaching purposes — not a captured vendor screenshot and not attributed to any specific vendor's actual interface."
+}

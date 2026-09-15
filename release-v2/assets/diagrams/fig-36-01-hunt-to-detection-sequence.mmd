@@ -1,0 +1,11 @@
+flowchart TD
+    A["Hunt finding<br/>(HUNT-36-01)"] --> B["1. Pattern discovery"]
+    B -->|"doesn't generalize"| X["Documented negative finding<br/>(§9) -- no new rule"]
+    B -->|"looks repeatable"| C["2. Historical validation"]
+    C -->|"pattern doesn't hold up"| X
+    C -->|"pattern holds"| D["3. Feature selection"]
+    D --> E["4. Analytic authoring<br/>Threat Hypothesis + Logic<br/>(DET-36-01)"]
+    E --> F["5. Test<br/>TP/FP fixtures"]
+    F --> G["6. Deploy<br/>PR into Part 22's pipeline<br/>(lint -> test -> review -> merge)"]
+    G --> H["7. Monitor<br/>alert volume, Last Tested"]
+    H -.->|"drift or gap suspected"| B

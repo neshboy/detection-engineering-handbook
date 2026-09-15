@@ -1,0 +1,19 @@
+{
+  "title": "UTC-aligned session timeline: SSH success, flagged sudo session, systemd state change",
+  "event_type": "Threat-hunting timeline visualization — three-event session chain (sshd -> sudo -> systemd), synthetic positive-finding example from part 34 section 10.8",
+  "fields": [
+    { "label": "2026-09-22 03:14:07 UTC — sshd", "value": "Accepted publickey for vulnscan from 203.0.113.44 port 51102" },
+    { "label": "2026-09-22 03:14:41 UTC — sudo", "value": "vulnscan : TTY=pts/2 ; PWD=/opt/vulnscan ; USER=root ; COMMAND=/usr/bin/systemctl restart vulnscan-web" },
+    { "label": "2026-09-22 03:14:41 UTC — systemd", "value": "Stopping vulnscan-web.service - Vulnerability Scanner Dashboard (web)..." },
+    { "label": "2026-09-22 03:14:42 UTC — systemd", "value": "Started vulnscan-web.service - Vulnerability Scanner Dashboard (web)." },
+    { "label": "Join key", "value": "account=vulnscan, host=vulnscan (composite key — no native cross-event session ID available)" },
+    { "label": "Baseline comparison", "value": "interactive_rate=0 historically for vulnscan; this session is the first TTY-present sudo invocation on record" }
+  ],
+  "callouts": [
+    { "number": 1, "field_label": "2026-09-22 03:14:07 UTC — sshd", "explanation": "A single first-attempt success with no preceding failure burst satisfies the 'valid credentials' half of the hunt's hypothesis — this is not a brute-force compromise." },
+    { "number": 2, "field_label": "2026-09-22 03:14:41 UTC — sudo", "explanation": "TTY=pts/2 present against an account with a zero-interactive-history baseline is the specific anomaly DET-34-01 is built to catch." },
+    { "number": 3, "field_label": "Join key", "explanation": "Linux telemetry has no native session-linking field like a Windows Logon ID, so this join is an explicit (account, host, time-proximity) judgment call that a second reviewer must be able to check." },
+    { "number": 4, "field_label": "2026-09-22 03:14:42 UTC — systemd", "explanation": "The service restart immediately following the anomalous sudo session is the 'did something with it' step that completes the pivot chain from credential use to actionable lead." }
+  ],
+  "note": "CONCEPTUAL — an illustrative reconstruction of the synthetic three-event session chain described in section 10.8, laid out as a generic UTC-aligned timeline; it is not a captured screenshot of any real SIEM product interface."
+}

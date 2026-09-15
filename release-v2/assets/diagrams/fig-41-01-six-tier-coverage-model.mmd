@@ -1,0 +1,11 @@
+flowchart LR
+    A["NO VISIBILITY"] -->|"log source onboarded"| B["TELEMETRY ONLY"]
+    B -->|"analytic built and deployed"| C["PARTIAL DETECTION"]
+    C -->|"evasion path closed, FP rate acceptable"| D["RELIABLE DETECTION"]
+    D -->|"second independent source validated"| E["MULTI-SOURCE DETECTION"]
+    E -->|"adversary emulation passes in-window"| F["TESTED / RECENTLY VALIDATED"]
+    F -.->|"recency window expires, no re-test"| E
+    E -.->|"one source breaks silently (schema drift)"| D
+    D -.->|"new evasion path discovered"| C
+    C -.->|"telemetry source stops flowing"| B
+    B -.->|"log source decommissioned or defunded"| A

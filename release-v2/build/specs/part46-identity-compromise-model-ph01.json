@@ -1,0 +1,21 @@
+{
+  "title": "Paired on-prem AD enumeration and cloud directory-read events for one identity",
+  "event_type": "Sysmon Event ID 1 (Process Create) for a Get-ADUser-style enumeration command, correlated with an Entra ID / Graph API AuditLogs directory-read entry, same identity, same session window",
+  "fields": [
+    {"label": "OnPremTime", "value": "2026-09-15T14:02:11Z"},
+    {"label": "CommandLine", "value": "powershell.exe -Command \"Get-ADUser -Filter * -Properties memberof,adminCount\""},
+    {"label": "SubjectUserName / SamAccountName", "value": "jsmith"},
+    {"label": "ParentImage", "value": "C:\\Windows\\System32\\cmd.exe"},
+    {"label": "CloudTime", "value": "2026-09-15T14:09:47Z"},
+    {"label": "OperationName (AuditLogs)", "value": "GET /v1.0/directoryRoles (Graph API directory-role read)"},
+    {"label": "UserPrincipalName", "value": "jsmith@contoso.onmicrosoft.com"},
+    {"label": "IPAddress / DeviceDetail", "value": "203.0.113.44 / previously-unseen device ID"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "CommandLine", "explanation": "The Get-ADUser invocation with a broad filter and privilege-relevant properties (memberof, adminCount) is the on-prem enumeration half of the pair Part 13 §7 already detects at the process-creation level."},
+    {"number": 2, "field_label": "OperationName (AuditLogs)", "explanation": "The cloud-side directory-role read is the Graph API equivalent enumeration action; on its own it is implicit in Part 18's scope but not a standing detection there."},
+    {"number": 3, "field_label": "UserPrincipalName", "explanation": "Resolving SubjectUserName to this UserPrincipalName is the HybridIdentityMap join DET-46-04 depends on — without it, the two events never get tied to the same identity."},
+    {"number": 4, "field_label": "CloudTime", "explanation": "The roughly 7-minute gap between OnPremTime and CloudTime falls inside DET-46-04's correlation window, illustrating why the pairing — not either event alone — is the signal worth alerting on."}
+  ],
+  "note": "This is an illustrative, conceptual field breakdown of what a paired on-prem/cloud enumeration capture would show, not a captured screenshot from a real AD domain controller or live cloud tenant, and no product interface is depicted."
+}

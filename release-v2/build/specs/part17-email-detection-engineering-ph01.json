@@ -1,0 +1,21 @@
+{
+  "title": "Malicious inbox rule creation preceded by an anomalous sign-in",
+  "event_type": "Mailbox-audit event (New-InboxRule) joined with the preceding sign-in event for the same mailbox, illustrating the DET-17-04 / HUNT-17-02 join",
+  "fields": [
+    {"label": "Timestamp (sign-in)", "value": "2026-08-11T03:14:52Z"},
+    {"label": "SignInLocation / ASN", "value": "Lagos, NG — AS29465 (no prior sign-in history for this mailbox)"},
+    {"label": "ClientAppUsed", "value": "generic OAuth API client (not the standard web mail-client UI)"},
+    {"label": "Timestamp (rule creation)", "value": "2026-08-11T03:19:07Z"},
+    {"label": "Operation", "value": "New-InboxRule"},
+    {"label": "MailboxOwner", "value": "j.alvarez@contoso-example.com"},
+    {"label": "Parameters.ForwardTo", "value": "j.alvarez.invoices@external-example-mail.com"},
+    {"label": "Parameters.DeleteMessage", "value": "True"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "Timestamp (sign-in) / Timestamp (rule creation)", "explanation": "The rule is created only five minutes after the sign-in — this is the join HUNT-17-02 relies on: a rule-creation event is far higher confidence when it follows a sign-in anomaly by minutes rather than appearing with no correlated sign-in context at all."},
+    {"number": 2, "field_label": "SignInLocation / ASN", "explanation": "A new ASN/geo with no prior sign-in history for this mailbox is the sign-in-side anomaly Part 12's identity telemetry would flag; on its own it's only low-to-medium confidence, per §9's discussion of composite BEC chains."},
+    {"number": 3, "field_label": "Parameters.ForwardTo", "explanation": "An external domain not in KnownOrgDomains is the core signal DET-17-04's query filters on; this is the field the ForwardTo/RedirectTo/ForwardAsAttachmentTo coalesce in the KQL sample is trying to populate."},
+    {"number": 4, "field_label": "Parameters.DeleteMessage", "explanation": "DeleteMessage = True is the evidence-hiding action that escalates this from a plain external-forward alert to the higher-severity tier described in the Detection Autopsy for DET-17-04 — it removes the victim's own copy of the forwarded mail."}
+  ],
+  "note": "This is a conceptual, illustrative field breakdown built to match the prose discussion of DET-17-04 and HUNT-17-02 — not a captured screenshot, and no product interface is depicted; the author's lab has no mail-tenant infrastructure to generate this telemetry organically."
+}

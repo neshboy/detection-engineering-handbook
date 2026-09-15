@@ -1,0 +1,57 @@
+================================================================================
+SOURCE HOST/CONTAINER : CT104 "vulnscan" (vulnerability-scanner platform)
+COMMAND USED          : pct exec 104 -- bash -c "journalctl _COMM=sudo --no-pager -n 40"
+                        (via python C:/Users/User/proxmox_docs_helper.py guest 104 "journalctl _COMM=sudo --no-pager -n 40 2>&1")
+CAPTURE TIMESTAMP     : 2026-09-15T08:36:46Z (capture run); log lines span 2026-09-10
+EVIDENCE TYPE         : REAL LAB EXAMPLE (genuine pre-existing systemd journal / sudo log)
+TELEMETRY CATEGORY    : (2) sudo command invocation - invoking user (root), target user
+                        (vulnscan), and exact command are all visible
+NOTES                 : Recurring automated sudo invocations: root running
+                        `sqlite3 /opt/vulnscan/data/vulnscan.db 'SELECT ...'` as the
+                        `vulnscan` service account on a regular interval -- this is the
+                        vulnscan platform's own health-check/monitoring script polling
+                        its database via sudo, a useful real example of a scripted/
+                        scheduled sudo pattern (contrast with interactive admin sudo use
+                        in ct100-pihole-sudo-invocations.txt).
+================================================================================
+
+Sep 10 05:42:02 vulnscan sudo[2229]:     root : PWD=/root ; USER=vulnscan ; COMMAND=/usr/bin/sqlite3 /opt/vulnscan/data/vulnscan.db 'SELECT count(*) FROM scanner_errors;'
+Sep 10 05:42:02 vulnscan sudo[2229]: pam_limits(sudo:session): Could not set limit for 'core' to soft=0, hard=-1: Operation not permitted; uid=0,euid=0
+Sep 10 05:42:02 vulnscan sudo[2229]: pam_unix(sudo:session): session opened for user vulnscan(uid=999) by (uid=0)
+Sep 10 05:42:02 vulnscan sudo[2229]: pam_unix(sudo:session): session closed for user vulnscan
+Sep 10 06:38:57 vulnscan sudo[2393]:     root : PWD=/root ; USER=vulnscan ; COMMAND=/usr/bin/sqlite3 /opt/vulnscan/data/vulnscan.db 'SELECT count(*) FROM scanner_errors;'
+Sep 10 06:38:57 vulnscan sudo[2393]: pam_limits(sudo:session): Could not set limit for 'core' to soft=0, hard=-1: Operation not permitted; uid=0,euid=0
+Sep 10 06:38:57 vulnscan sudo[2393]: pam_unix(sudo:session): session opened for user vulnscan(uid=999) by (uid=0)
+Sep 10 06:38:57 vulnscan sudo[2393]: pam_unix(sudo:session): session closed for user vulnscan
+Sep 10 07:35:56 vulnscan sudo[2616]:     root : PWD=/root ; USER=vulnscan ; COMMAND=/usr/bin/sqlite3 /opt/vulnscan/data/vulnscan.db 'SELECT count(*) FROM scanner_errors;'
+Sep 10 07:35:56 vulnscan sudo[2616]: pam_limits(sudo:session): Could not set limit for 'core' to soft=0, hard=-1: Operation not permitted; uid=0,euid=0
+Sep 10 07:35:56 vulnscan sudo[2616]: pam_unix(sudo:session): session opened for user vulnscan(uid=999) by (uid=0)
+Sep 10 07:35:56 vulnscan sudo[2616]: pam_unix(sudo:session): session closed for user vulnscan
+Sep 10 07:53:34 vulnscan sudo[2667]:     root : PWD=/root ; USER=vulnscan ; COMMAND=/usr/bin/sqlite3 /opt/vulnscan/data/vulnscan.db 'SELECT key,value FROM config WHERE key IN (\'intel_version\',\'intel_last_success_at\');'
+Sep 10 07:53:34 vulnscan sudo[2667]: pam_limits(sudo:session): Could not set limit for 'core' to soft=0, hard=-1: Operation not permitted; uid=0,euid=0
+Sep 10 07:53:34 vulnscan sudo[2667]: pam_unix(sudo:session): session opened for user vulnscan(uid=999) by (uid=0)
+Sep 10 07:53:34 vulnscan sudo[2667]: pam_unix(sudo:session): session closed for user vulnscan
+Sep 10 07:53:35 vulnscan sudo[2669]:     root : PWD=/root ; USER=vulnscan ; COMMAND=/usr/bin/sqlite3 /opt/vulnscan/data/vulnscan.db 'SELECT count(*) FROM scanner_errors;'
+Sep 10 07:53:35 vulnscan sudo[2669]: pam_limits(sudo:session): Could not set limit for 'core' to soft=0, hard=-1: Operation not permitted; uid=0,euid=0
+Sep 10 07:53:35 vulnscan sudo[2669]: pam_unix(sudo:session): session opened for user vulnscan(uid=999) by (uid=0)
+Sep 10 07:53:35 vulnscan sudo[2669]: pam_unix(sudo:session): session closed for user vulnscan
+Sep 10 09:46:11 vulnscan sudo[2927]:     root : PWD=/root ; USER=vulnscan ; COMMAND=/usr/bin/sqlite3 /opt/vulnscan/data/vulnscan.db 'SELECT count(*) FROM scanner_errors;'
+Sep 10 09:46:11 vulnscan sudo[2927]: pam_limits(sudo:session): Could not set limit for 'core' to soft=0, hard=-1: Operation not permitted; uid=0,euid=0
+Sep 10 09:46:11 vulnscan sudo[2927]: pam_unix(sudo:session): session opened for user vulnscan(uid=999) by (uid=0)
+Sep 10 09:46:11 vulnscan sudo[2927]: pam_unix(sudo:session): session closed for user vulnscan
+Sep 10 10:33:10 vulnscan sudo[3040]:     root : PWD=/root ; USER=vulnscan ; COMMAND=/usr/bin/sqlite3 /opt/vulnscan/data/vulnscan.db 'SELECT count(*) FROM scanner_errors;'
+Sep 10 10:33:10 vulnscan sudo[3040]: pam_limits(sudo:session): Could not set limit for 'core' to soft=0, hard=-1: Operation not permitted; uid=0,euid=0
+Sep 10 10:33:10 vulnscan sudo[3040]: pam_unix(sudo:session): session opened for user vulnscan(uid=999) by (uid=0)
+Sep 10 10:33:10 vulnscan sudo[3040]: pam_unix(sudo:session): session closed for user vulnscan
+Sep 10 11:20:09 vulnscan sudo[3149]:     root : PWD=/root ; USER=vulnscan ; COMMAND=/usr/bin/sqlite3 /opt/vulnscan/data/vulnscan.db 'SELECT count(*) FROM scanner_errors;'
+Sep 10 11:20:09 vulnscan sudo[3149]: pam_limits(sudo:session): Could not set limit for 'core' to soft=0, hard=-1: Operation not permitted; uid=0,euid=0
+Sep 10 11:20:09 vulnscan sudo[3149]: pam_unix(sudo:session): session opened for user vulnscan(uid=999) by (uid=0)
+Sep 10 11:20:09 vulnscan sudo[3149]: pam_unix(sudo:session): session closed for user vulnscan
+Sep 10 12:06:51 vulnscan sudo[3258]:     root : PWD=/root ; USER=vulnscan ; COMMAND=/usr/bin/sqlite3 /opt/vulnscan/data/vulnscan.db 'SELECT count(*) FROM scanner_errors;'
+Sep 10 12:06:51 vulnscan sudo[3258]: pam_limits(sudo:session): Could not set limit for 'core' to soft=0, hard=-1: Operation not permitted; uid=0,euid=0
+Sep 10 12:06:51 vulnscan sudo[3258]: pam_unix(sudo:session): session opened for user vulnscan(uid=999) by (uid=0)
+Sep 10 12:06:51 vulnscan sudo[3258]: pam_unix(sudo:session): session closed for user vulnscan
+Sep 10 12:54:11 vulnscan sudo[3370]:     root : PWD=/root ; USER=vulnscan ; COMMAND=/usr/bin/sqlite3 /opt/vulnscan/data/vulnscan.db 'SELECT count(*) FROM scanner_errors;'
+Sep 10 12:54:11 vulnscan sudo[3370]: pam_limits(sudo:session): Could not set limit for 'core' to soft=0, hard=-1: Operation not permitted; uid=0,euid=0
+Sep 10 12:54:11 vulnscan sudo[3370]: pam_unix(sudo:session): session opened for user vulnscan(uid=999) by (uid=0)
+Sep 10 12:54:11 vulnscan sudo[3370]: pam_unix(sudo:session): session closed for user vulnscan

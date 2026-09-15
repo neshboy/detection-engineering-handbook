@@ -1,0 +1,21 @@
+{
+  "title": "Sysmon Event ID 10 (Process Access) — handle opened to LSASS by a credential-dumping tool",
+  "event_type": "Sysmon operational log, Event ID 10 (Process Access), TargetImage lsass.exe",
+  "fields": [
+    {"label": "UtcTime", "value": "2026-09-02 14:31:07.204"},
+    {"label": "SourceImage", "value": "C:\\Users\\labadmin\\Downloads\\procdump64.exe"},
+    {"label": "TargetImage", "value": "C:\\Windows\\System32\\lsass.exe"},
+    {"label": "SourceProcessId", "value": "6820"},
+    {"label": "TargetProcessId", "value": "672"},
+    {"label": "GrantedAccess", "value": "0x1fffff"},
+    {"label": "CallTrace", "value": "C:\\Windows\\SYSTEM32\\ntdll.dll+9c2f4|C:\\Windows\\System32\\KERNELBASE.dll+2d1a0|UNKNOWN(...)"},
+    {"label": "SourceUser", "value": "LABHOST\\labadmin"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "TargetImage", "explanation": "Confirms the accessed process is lsass.exe, the credential-material target described in section 4.1 — this field alone is not suspicious since many legitimate processes (AV/EDR agents, the OS itself) also open handles to LSASS."},
+    {"number": 2, "field_label": "GrantedAccess", "explanation": "The access-rights mask is the discriminating field: a broad mask like 0x1fffff (full access, typical of a full memory-dump tool) or a narrower memory-read mask such as 0x1010/0x1410 used by a targeted credential-dumping tool both indicate read access to LSASS memory, unlike harmless query-only access rights."},
+    {"number": 3, "field_label": "SourceImage", "explanation": "Identifies the requesting process; a signed, well-known dumping utility run from a non-standard user-writable path (Downloads, not an admin toolkit location) is itself part of the classification logic in section 2.2's tiering model."},
+    {"number": 4, "field_label": "CallTrace", "explanation": "The stack trace at the moment access was granted can show whether the request originated from a normal API call chain or from an unusual/unbacked module, a secondary signal analysts use to corroborate the GrantedAccess reading."}
+  ],
+  "note": "Illustrative/conceptual field breakdown of what a Sysmon Event ID 10 entry for LSASS memory access would contain — not a captured screenshot, and no product interface is depicted."
+}

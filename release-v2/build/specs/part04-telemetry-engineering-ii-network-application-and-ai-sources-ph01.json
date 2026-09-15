@@ -1,0 +1,19 @@
+{
+  "title": "Cloud data-plane (data-event) logging opt-in configuration",
+  "event_type": "Cloud provider console — data-plane/data-event logging configuration screen (e.g., AWS CloudTrail S3 data-events selector)",
+  "fields": [
+    {"label": "Trail name", "value": "org-management-trail"},
+    {"label": "Management events", "value": "Enabled (Read/Write) — on by default"},
+    {"label": "Data events", "value": "Disabled"},
+    {"label": "Data event resource type", "value": "AWS::S3::Object"},
+    {"label": "Data event selector scope", "value": "None selected — no buckets configured"},
+    {"label": "Estimated additional cost", "value": "$0.00 (no data events enabled)"},
+    {"label": "Read/Write type for data events", "value": "N/A — not configured"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "Management events", "explanation": "This tier is enabled by default and is what most teams mean when they say 'we have CloudTrail' — it only covers configuration/API-control-plane actions, not access to the data itself."},
+    {"number": 2, "field_label": "Data events", "explanation": "This is the separate, explicit opt-in tier that must be turned on per-resource to see actual object/record access (e.g., S3 GetObject); left disabled, a mass-download event against a bucket the attacker already has read access to produces zero log entries."},
+    {"number": 3, "field_label": "Data event selector scope", "explanation": "Even when the data-events tier is enabled, it must be scoped to specific buckets/resources — an org can enable the feature but still have zero coverage if no resources are selected here."}
+  ],
+  "note": "Illustrative/conceptual mockup of a cloud console logging-configuration screen; not a captured screenshot of any real vendor product."
+}

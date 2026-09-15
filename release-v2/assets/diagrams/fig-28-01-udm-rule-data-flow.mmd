@@ -1,0 +1,9 @@
+flowchart LR
+    A["Raw log\n(EDR export, firewall log,\nauth provider webhook, ...)"] --> B["Ingestion label\n(parser selection)"]
+    B --> C["Parser\n(vendor- or Google-maintained)"]
+    C --> D["UDM event\nprincipal / target / metadata.event_type"]
+    D --> E["YARA-L rule engine\nevaluates events / match / condition"]
+    E -->|"condition evaluates true"| F["Detection\n(outcome fields attached)"]
+    E -->|"no match"| X["No detection --\nindistinguishable from\n'nothing happened'"]
+    F --> G["Curated Detections /\nrisk-score aggregation"]
+    G --> H["Case / SOAR queue\n(analyst triage)"]

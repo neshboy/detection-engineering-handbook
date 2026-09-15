@@ -1,0 +1,67 @@
+================================================================================
+SOURCE HOST/CONTAINER : CT100 "pihole" (DNS/DHCP)
+COMMAND USED          : pct exec 100 -- bash -c "tail -n 50 /var/log/pihole/pihole.log"
+                        (via python C:/Users/User/proxmox_docs_helper.py guest 100 "tail -n 50 /var/log/pihole/pihole.log")
+CAPTURE TIMESTAMP     : 2026-09-15T08:36:46Z (capture run); log lines are from
+                        2026-09-15 08:32-08:33 (bounded 50-line tail, not a live tail)
+EVIDENCE TYPE         : REAL LAB EXAMPLE (genuine pre-existing dnsmasq/pihole query log)
+TELEMETRY CATEGORY    : (4) DNS query log - forwarded, cached, and gravity-blocked
+                        resolutions, plus one DHCP lease renewal from the same daemon
+NOTES                 : Includes a real gravity-list block of
+                        mobile.events.data.microsoft.com (Microsoft telemetry endpoint,
+                        blocked by Pi-hole's default blocklists) and ordinary forwarded/
+                        cached lookups from client devices on the LAN (192.168.1.169,
+                        192.168.1.126). No secrets present in DNS query logs; nothing
+                        redacted.
+================================================================================
+
+Sep 15 08:32:46 dnsmasq[2221]: forwarded software-static.download.prss.microsoft.com to 1.1.1.1
+Sep 15 08:32:46 dnsmasq[2221]: reply software-static.download.prss.microsoft.com is <CNAME>
+Sep 15 08:32:46 dnsmasq[2221]: reply sundry-fg-geo-nocn.trafficmanager.net is <CNAME>
+Sep 15 08:32:46 dnsmasq[2221]: reply fg.microsoft.map.fastly.net is 199.232.210.172
+Sep 15 08:32:46 dnsmasq[2221]: reply fg.microsoft.map.fastly.net is 199.232.214.172
+Sep 15 08:32:46 dnsmasq[2221]: reply software-static.download.prss.microsoft.com is <CNAME>
+Sep 15 08:32:46 dnsmasq[2221]: reply sundry-fg-geo-nocn.trafficmanager.net is <CNAME>
+Sep 15 08:32:46 dnsmasq[2221]: reply download.prss.microsoft.com.akamaized.net is <CNAME>
+Sep 15 08:32:46 dnsmasq[2221]: reply a308.dscd.akamai.net is 2600:1413:5000:3c::1735:76e4
+Sep 15 08:32:46 dnsmasq[2221]: reply a308.dscd.akamai.net is 2600:1413:5000:3c::1735:76e9
+Sep 15 08:32:47 dnsmasq[2221]: query[A] mykulprint.atrapa.deloitte.com from 192.168.1.169
+Sep 15 08:32:47 dnsmasq[2221]: cached mykulprint.atrapa.deloitte.com is NXDOMAIN
+Sep 15 08:32:47 dnsmasq[2221]: query[AAAA] mykulprint.atrapa.deloitte.com from 192.168.1.169
+Sep 15 08:32:47 dnsmasq[2221]: cached mykulprint.atrapa.deloitte.com is NXDOMAIN
+Sep 15 08:32:47 dnsmasq[2221]: query[AAAA] mykulprint.lan from 192.168.1.169
+Sep 15 08:32:47 dnsmasq[2221]: config mykulprint.lan is NXDOMAIN
+Sep 15 08:32:47 dnsmasq[2221]: query[A] mykulprint.lan from 192.168.1.169
+Sep 15 08:32:47 dnsmasq[2221]: config mykulprint.lan is NXDOMAIN
+Sep 15 08:32:47 dnsmasq[2221]: query[A] mykulprint.deloitte.com from 192.168.1.169
+Sep 15 08:32:47 dnsmasq[2221]: cached mykulprint.deloitte.com is NXDOMAIN
+Sep 15 08:32:47 dnsmasq[2221]: query[AAAA] mykulprint.deloitte.com from 192.168.1.169
+Sep 15 08:32:47 dnsmasq[2221]: cached mykulprint.deloitte.com is NXDOMAIN
+Sep 15 08:32:49 dnsmasq[2221]: query[A] mykulprint.atrapa.deloitte.com from 192.168.1.169
+Sep 15 08:32:49 dnsmasq[2221]: cached mykulprint.atrapa.deloitte.com is NXDOMAIN
+Sep 15 08:32:49 dnsmasq[2221]: query[AAAA] mykulprint.atrapa.deloitte.com from 192.168.1.169
+Sep 15 08:32:49 dnsmasq[2221]: cached mykulprint.atrapa.deloitte.com is NXDOMAIN
+Sep 15 08:32:49 dnsmasq[2221]: query[A] mykulprint.lan from 192.168.1.169
+Sep 15 08:32:49 dnsmasq[2221]: config mykulprint.lan is NXDOMAIN
+Sep 15 08:32:49 dnsmasq[2221]: query[AAAA] mykulprint.lan from 192.168.1.169
+Sep 15 08:32:49 dnsmasq[2221]: config mykulprint.lan is NXDOMAIN
+Sep 15 08:32:49 dnsmasq[2221]: query[A] mykulprint.deloitte.com from 192.168.1.169
+Sep 15 08:32:49 dnsmasq[2221]: cached mykulprint.deloitte.com is NXDOMAIN
+Sep 15 08:32:49 dnsmasq[2221]: query[AAAA] mykulprint.deloitte.com from 192.168.1.169
+Sep 15 08:32:49 dnsmasq[2221]: cached mykulprint.deloitte.com is NXDOMAIN
+Sep 15 08:32:49 dnsmasq[2221]: query[AAAA] mobile.events.data.microsoft.com from 192.168.1.169
+Sep 15 08:32:49 dnsmasq[2221]: gravity blocked mobile.events.data.microsoft.com is ::
+Sep 15 08:32:49 dnsmasq[2221]: query[A] mobile.events.data.microsoft.com from 192.168.1.169
+Sep 15 08:32:49 dnsmasq[2221]: gravity blocked mobile.events.data.microsoft.com is 0.0.0.0
+Sep 15 08:32:49 dnsmasq[2221]: query[AAAA] cari.com.my from 192.168.1.126
+Sep 15 08:32:49 dnsmasq[2221]: forwarded cari.com.my to 1.1.1.1
+Sep 15 08:32:49 dnsmasq[2221]: query[A] cari.com.my from 192.168.1.126
+Sep 15 08:32:49 dnsmasq[2221]: forwarded cari.com.my to 1.1.1.1
+Sep 15 08:32:49 dnsmasq[2221]: reply cari.com.my is 104.26.1.204
+Sep 15 08:32:49 dnsmasq[2221]: reply cari.com.my is 104.26.0.204
+Sep 15 08:32:49 dnsmasq[2221]: reply cari.com.my is 172.67.71.236
+Sep 15 08:32:49 dnsmasq[2221]: reply cari.com.my is 2606:4700:20::ac43:47ec
+Sep 15 08:32:49 dnsmasq[2221]: reply cari.com.my is 2606:4700:20::681a:cc
+Sep 15 08:32:49 dnsmasq[2221]: reply cari.com.my is 2606:4700:20::681a:1cc
+Sep 15 08:32:50 dnsmasq-dhcp[2221]: DHCPREQUEST(eth0) 192.168.1.7 b0:19:21:83:77:bf
+Sep 15 08:32:50 dnsmasq-dhcp[2221]: DHCPACK(eth0) 192.168.1.7 b0:19:21:83:77:bf Archer

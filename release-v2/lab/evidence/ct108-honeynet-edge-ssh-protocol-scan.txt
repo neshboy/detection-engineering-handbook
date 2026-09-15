@@ -1,0 +1,65 @@
+================================================================================
+SOURCE HOST/CONTAINER : CT108 "honeynet-edge" (AeroNex honeynet edge/IDS gateway)
+COMMAND USED          : pct exec 108 -- bash -c 'journalctl -u ssh --no-pager -n 80'
+                        (via python C:/Users/User/proxmox_docs_helper.py guest 108 "journalctl -u ssh --no-pager -n 80")
+CAPTURE TIMESTAMP     : 2026-09-15T08:36:46Z (capture run); log lines span 2026-09-10
+EVIDENCE TYPE         : REAL LAB EXAMPLE (genuine pre-existing systemd journal / sshd log)
+TELEMETRY CATEGORY    : (1) SSH authentication / connection events, (3) systemd service
+                        state changes (ssh.service start/stop is visible in the same unit
+                        journal)
+NOTES                 : Source IP 192.168.1.96 is the lab's own CT104 "vulnscan" host
+                        performing SSH protocol/cipher enumeration against the honeynet
+                        edge (legacy KEX/host-key algorithm offers such as
+                        diffie-hellman-group1-sha1, ssh-rsa, ssh-dss, and an SSHv1 banner
+                        probe). This is internal vulnerability-scanner traffic, not an
+                        external attacker, but it is a realistic example of the exact
+                        sshd log signature a "legacy SSH protocol/algorithm probe"
+                        detection rule should fire on.
+================================================================================
+
+Sep 10 09:27:50 honeynet-edge systemd[1]: Starting ssh.service - OpenBSD Secure Shell server...
+Sep 10 09:27:50 honeynet-edge sshd[142]: Server listening on :: port 22.
+Sep 10 09:27:50 honeynet-edge systemd[1]: Started ssh.service - OpenBSD Secure Shell server.
+Sep 10 13:51:57 honeynet-edge systemd[1]: Stopping ssh.service - OpenBSD Secure Shell server...
+Sep 10 13:51:57 honeynet-edge sshd[142]: Received signal 15; terminating.
+Sep 10 13:51:57 honeynet-edge systemd[1]: ssh.service: Deactivated successfully.
+Sep 10 13:51:57 honeynet-edge systemd[1]: Stopped ssh.service - OpenBSD Secure Shell server.
+-- Boot 905d9aa586d943579ba2270fdacca1fd --
+Sep 10 13:52:04 honeynet-edge systemd[1]: Starting ssh.service - OpenBSD Secure Shell server...
+Sep 10 13:52:04 honeynet-edge sshd[151]: Server listening on :: port 22.
+Sep 10 13:52:04 honeynet-edge systemd[1]: Started ssh.service - OpenBSD Secure Shell server.
+Sep 10 16:19:33 honeynet-edge sshd[537]: error: kex_exchange_identification: Connection closed by remote host
+Sep 10 16:19:33 honeynet-edge sshd[537]: Connection closed by 192.168.1.96 port 35606
+Sep 10 16:21:03 honeynet-edge sshd[542]: error: kex_exchange_identification: Connection closed by remote host
+Sep 10 16:21:03 honeynet-edge sshd[542]: Connection closed by 192.168.1.96 port 43062
+Sep 10 16:21:03 honeynet-edge sshd[540]: error: Protocol major versions differ: 2 vs. 1
+Sep 10 16:21:03 honeynet-edge sshd[540]: banner exchange: Connection from 192.168.1.96 port 43042: could not read protocol version
+Sep 10 16:21:03 honeynet-edge sshd[543]: error: Protocol major versions differ: 2 vs. 1
+Sep 10 16:21:03 honeynet-edge sshd[543]: banner exchange: Connection from 192.168.1.96 port 43064: could not read protocol version
+Sep 10 16:21:03 honeynet-edge sshd[539]: Unable to negotiate with 192.168.1.96 port 43036: no matching key exchange method found. Their offer: diffie-hellman-group1-sha1 [preauth]
+Sep 10 16:21:03 honeynet-edge sshd[541]: Unable to negotiate with 192.168.1.96 port 43058: no matching host key type found. Their offer: ssh-rsa [preauth]
+Sep 10 16:21:04 honeynet-edge sshd[546]: Unable to negotiate with 192.168.1.96 port 43066: no matching host key type found. Their offer: ssh-dss [preauth]
+Sep 10 16:21:04 honeynet-edge sshd[548]: Unable to negotiate with 192.168.1.96 port 43078: no matching host key type found. Their offer: ssh-rsa [preauth]
+Sep 10 16:21:04 honeynet-edge sshd[550]: Connection closed by 192.168.1.96 port 43082 [preauth]
+Sep 10 16:21:04 honeynet-edge sshd[552]: Unable to negotiate with 192.168.1.96 port 43090: no matching host key type found. Their offer: ecdsa-sha2-nistp384 [preauth]
+Sep 10 16:21:05 honeynet-edge sshd[554]: Unable to negotiate with 192.168.1.96 port 43092: no matching host key type found. Their offer: ecdsa-sha2-nistp521 [preauth]
+Sep 10 16:21:05 honeynet-edge sshd[556]: Connection closed by 192.168.1.96 port 43100 [preauth]
+Sep 10 16:22:20 honeynet-edge sshd[558]: error: kex_exchange_identification: Connection closed by remote host
+Sep 10 16:22:20 honeynet-edge sshd[558]: Connection closed by 192.168.1.96 port 48426
+Sep 13 03:09:52 honeynet-edge sshd[1608]: error: kex_exchange_identification: Connection closed by remote host
+Sep 13 03:09:52 honeynet-edge sshd[1608]: Connection closed by 192.168.1.96 port 56180
+Sep 13 03:11:22 honeynet-edge sshd[1610]: error: Protocol major versions differ: 2 vs. 1
+Sep 13 03:11:22 honeynet-edge sshd[1610]: banner exchange: Connection from 192.168.1.96 port 49404: could not read protocol version
+Sep 13 03:11:23 honeynet-edge sshd[1613]: error: kex_exchange_identification: Connection closed by remote host
+Sep 13 03:11:23 honeynet-edge sshd[1613]: Connection closed by 192.168.1.96 port 49448
+Sep 13 03:11:23 honeynet-edge sshd[1611]: Unable to negotiate with 192.168.1.96 port 49416: no matching host key type found. Their offer: ssh-dss [preauth]
+Sep 13 03:11:23 honeynet-edge sshd[1612]: Unable to negotiate with 192.168.1.96 port 49432: no matching key exchange method found. Their offer: diffie-hellman-group1-sha1 [preauth]
+Sep 13 03:11:23 honeynet-edge sshd[1616]: error: Protocol major versions differ: 2 vs. 1
+Sep 13 03:11:23 honeynet-edge sshd[1616]: banner exchange: Connection from 192.168.1.96 port 49450: could not read protocol version
+Sep 13 03:11:23 honeynet-edge sshd[1618]: Unable to negotiate with 192.168.1.96 port 49474: no matching host key type found. Their offer: ssh-rsa [preauth]
+Sep 13 03:11:23 honeynet-edge sshd[1621]: Connection closed by 192.168.1.96 port 49490 [preauth]
+Sep 13 03:11:24 honeynet-edge sshd[1623]: Unable to negotiate with 192.168.1.96 port 49502: no matching host key type found. Their offer: ecdsa-sha2-nistp384 [preauth]
+Sep 13 03:11:24 honeynet-edge sshd[1625]: Unable to negotiate with 192.168.1.96 port 49504: no matching host key type found. Their offer: ecdsa-sha2-nistp521 [preauth]
+Sep 13 03:11:24 honeynet-edge sshd[1627]: Connection closed by 192.168.1.96 port 49514 [preauth]
+Sep 13 03:12:48 honeynet-edge sshd[1629]: error: kex_exchange_identification: Connection closed by remote host
+Sep 13 03:12:48 honeynet-edge sshd[1629]: Connection closed by 192.168.1.96 port 60804

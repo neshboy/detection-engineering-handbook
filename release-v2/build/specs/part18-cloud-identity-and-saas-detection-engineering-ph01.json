@@ -1,0 +1,19 @@
+{
+  "title": "Entra ID enterprise application permissions blade — requested delegated scopes at consent time",
+  "event_type": "Entra ID enterprise application registration — consent-prompt scope detail (admin/user view)",
+  "fields": [
+    {"label": "App display name", "value": "Quarterly Report Viewer"},
+    {"label": "Publisher domain", "value": "unverified-publisher.example.com"},
+    {"label": "Application (client) ID", "value": "8f3b6a2e-4c1d-4e9a-9f77-2b6a1d5c3e90"},
+    {"label": "Permission type", "value": "Delegated"},
+    {"label": "Requested permissions", "value": "Mail.Read, Files.ReadWrite.All, offline_access"},
+    {"label": "Admin consent required", "value": "No — user consent allowed under current tenant policy"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "Publisher domain", "explanation": "An unverified or newly-registered publisher domain is the strongest visual cue at consent time that the app is not from a known vendor, but the blade presents it with no more visual weight than any other field, so users skim past it."},
+    {"number": 2, "field_label": "Requested permissions", "explanation": "Mail.Read and Files.ReadWrite.All are the broad delegated scopes that give a consented app standing read/write access to the victim's mailbox and files, not a one-time action."},
+    {"number": 3, "field_label": "Requested permissions", "explanation": "offline_access is the specific scope that converts a single consent into a long-lived refresh token — this is what keeps the app's access working after the victim resets their password."},
+    {"number": 4, "field_label": "Admin consent required", "explanation": "When this is 'No,' any individual user completing the consent prompt grants the scope tenant-wide for their own account with no administrator review, which is the exact gap illicit-consent-grant attacks rely on."}
+  ],
+  "note": "Illustrative and conceptual — a reconstructed field breakdown of what the consent blade shows, not a captured screenshot of any real Entra ID tenant or vendor console UI."
+}

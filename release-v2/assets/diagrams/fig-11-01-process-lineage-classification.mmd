@@ -1,0 +1,8 @@
+flowchart TD
+    A["Process-create event observed<br/>(parent process -> child process)"] --> B{"Is this parent-&gt;child pair on the<br/>environment's documented, expected-lineage baseline?<br/>(e.g. explorer.exe -&gt; outlook.exe)"}
+    B -->|Yes, common and documented| C["EXPECTED<br/>No alert. Log for baseline only."]
+    B -->|"No match in baseline"| D{"Has this exact pair been observed<br/>before in this environment,<br/>just infrequently?"}
+    D -->|"Yes, low-frequency but explainable<br/>(e.g. one-off admin script)"| E["RARE<br/>Surface to hunt queue.<br/>No standing alert on its own."]
+    D -->|"No, never observed,<br/>or child matches a known<br/>LOLBin / credential-access target"| F{"Does the child's command line carry<br/>an aggravating signal -<br/>encoded/obfuscated arguments,<br/>a remote-content fetch, or a<br/>credential-store target path?"}
+    F -->|No| G["SUSPICIOUS<br/>Tier-1 alert. Triage against\nknown-admin-tool allowlist first."]
+    F -->|Yes| H["HIGHLY SUSPICIOUS<br/>Tier-2 alert. Treat as likely\npost-exploitation until disproven."]

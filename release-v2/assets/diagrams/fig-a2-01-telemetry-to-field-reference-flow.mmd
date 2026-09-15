@@ -1,0 +1,23 @@
+flowchart LR
+    subgraph RAW["Raw log sources"]
+        E["Entra ID SigninLogs /\nAuditLogs"]
+        O["Okta System Log"]
+        K["Windows Security log\n(4768 / 4769 / 4771)"]
+        L["LDAP directory queries"]
+        Z["Zeek conn.log / dns.log /\nhttp.log / ssl.log / files.log"]
+        N["NetFlow / IPFIX\nflow records"]
+        M["Mail headers\n(Authentication-Results)"]
+    end
+    E --> F["This appendix --\ncanonical field tables\n(Sections 1-2)"]
+    O --> F
+    K --> F
+    L --> F
+    Z --> F
+    N --> F
+    M --> F
+    F --> P12["Part 12 -- Access &\nAuthentication Detection"]
+    F --> P13["Part 13 -- Directory,\nPrivilege & Kerberos"]
+    F --> P14["Part 14 -- Network\nDetection Engineering"]
+    F --> P15["Part 15 -- DNS\nDetection Engineering"]
+    F --> P16["Part 16 -- Web\nDetection Engineering"]
+    F --> P17["Part 17 -- Email\nDetection Engineering"]

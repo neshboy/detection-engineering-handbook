@@ -1,0 +1,21 @@
+{
+  "title": "Unsigned Child Process Spawned by Web Server — Lineage Tier Escalation",
+  "event_type": "Process-creation telemetry (Sysmon-style Event ID 1), web-server parent spawning an unsigned child, evaluated against Part 11's lineage-tier model",
+  "fields": [
+    {"label": "ParentImage", "value": "C:\\Windows\\System32\\inetsrv\\w3wp.exe"},
+    {"label": "ParentCommandLine", "value": "w3wp.exe -ap \"DefaultAppPool\" -v v4.0"},
+    {"label": "ChildImage", "value": "C:\\Windows\\Temp\\svchosts.exe"},
+    {"label": "ChildCommandLine", "value": "svchosts.exe -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQA..."},
+    {"label": "SignatureStatus", "value": "Unsigned"},
+    {"label": "ParentChildPairFrequency", "value": "Never observed before in this environment (0 prior occurrences over 90-day baseline)"},
+    {"label": "LineageTier", "value": "Highly Suspicious (escalated from Suspicious solely on unsigned child signature)"},
+    {"label": "UtcTime", "value": "2026-09-11 03:14:27.881"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "SignatureStatus", "explanation": "Under the naive rule this field alone would fire the alert; under the revised model it only shifts the lineage tier rather than standing as a verdict on its own."},
+    {"number": 2, "field_label": "LineageTier", "explanation": "The actual output of Part 11's four-tier model — the unsigned status raised an already-rare parent-child pair from Suspicious to Highly Suspicious, which is the mechanism the fix depends on."},
+    {"number": 3, "field_label": "ParentChildPairFrequency", "explanation": "A web server spawning any child process at all is rare in a healthy deployment; a never-before-seen pairing is the baseline signal that a bare signature check has no way to express."},
+    {"number": 4, "field_label": "ParentImage", "explanation": "Identifies the parent as the web-server worker process itself, the exact relationship Part 16's DET-16-04 targets instead of the child binary's signature status alone."}
+  ],
+  "note": "This is an illustrative, conceptual field breakdown of a process-creation event and its resulting lineage-tier classification; it is not a captured screenshot and depicts no product interface."
+}

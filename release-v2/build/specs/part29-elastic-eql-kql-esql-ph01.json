@@ -1,0 +1,19 @@
+{
+  "title": "HUNT-29-01 ES|QL aggregation result — repeated low-and-slow credential guess",
+  "event_type": "ES|QL query result row, STATS ... BY source.ip, user.name, user.password_guess (honeynet SSH decoy telemetry)",
+  "fields": [
+    {"label": "source.ip", "value": "176.53.159.196"},
+    {"label": "user.name", "value": "support"},
+    {"label": "user.password_guess", "value": "support"},
+    {"label": "attempts", "value": "47"},
+    {"label": "first_seen", "value": "2026-09-01T03:12:44.000Z"},
+    {"label": "last_seen", "value": "2026-09-14T22:47:09.000Z"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "source.ip", "explanation": "The single decoy-facing source (176.53.159.196) HUNT-12-01 originally identified by hand; grouping by this field is what HUNT-29-01's Blind Spot box warns breaks against a distributed credential-stuffing run."},
+    {"number": 2, "field_label": "attempts", "explanation": "47 retries clears the WHERE attempts >= 3 filter easily, but the count alone is not the signal — it is the same exact (account, credential) pair repeating that distinguishes this from ordinary noisy scanning."},
+    {"number": 3, "field_label": "user.password_guess", "explanation": "Paired with user.name = support, this is the exact repeated credential guess the hunt pivots on; user.password_guess is a custom field, not a standard ECS field, so its presence depends entirely on this honeypot's own ingestion mapping."},
+    {"number": 4, "field_label": "last_seen", "explanation": "Combined with first_seen, this spans roughly two weeks (well past the DATE_DIFF(\"hours\", first_seen, last_seen) >= 24 threshold), showing the pacing that would evade any short-window count-based detection rule."}
+  ],
+  "note": "Illustrative and conceptual only — this represents what a Kibana Discover result row would look like if the honeynet's SSH events were forwarded into an Elastic Stack instance; it is not a captured product screenshot."
+}

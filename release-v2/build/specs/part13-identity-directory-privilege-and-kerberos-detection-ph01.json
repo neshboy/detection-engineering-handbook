@@ -1,0 +1,20 @@
+{
+  "title": "Kerberos service ticket presented with no matching upstream TGT issuance",
+  "event_type": "Windows Security channel, Event ID 4769 (A Kerberos service ticket was requested), correlated against an absent Event ID 4768 for the same logon session",
+  "fields": [
+    {"label": "TargetUserName", "value": "CORP\\jsmith"},
+    {"label": "ServiceName", "value": "MSSQLSvc/db01.corp.local:1433"},
+    {"label": "TicketEncryptionType", "value": "0x12 (AES256)"},
+    {"label": "TargetLogonId", "value": "0x3F2A9C1"},
+    {"label": "TicketOptions", "value": "0x40810010"},
+    {"label": "IpAddress", "value": "10.12.4.87"},
+    {"label": "Corresponding 4768 for TargetLogonId 0x3F2A9C1", "value": "None found in the same session window"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "Corresponding 4768 for TargetLogonId 0x3F2A9C1", "explanation": "A legitimately issued ticket always has an issuance event (4768) upstream of a later use event (4769) in the same logon session; the absence of that matching 4768 — not any single field value on the 4769 itself — is the tell that this ticket may be forged rather than issued by the KDC."},
+    {"number": 2, "field_label": "TargetLogonId", "explanation": "The session identifier used to correlate ticket issuance against ticket use across the 4768/4769 pair; a stateful correlation engine keys on this field, not on username or source IP, since both are reused across unrelated sessions."},
+    {"number": 3, "field_label": "TicketEncryptionType", "explanation": "AES256 encryption on this ticket does not indicate legitimacy — a forged Golden or Silver Ticket can carry any encryption type the forger chooses, so this field alone cannot distinguish a valid ticket from a forged one."},
+    {"number": 4, "field_label": "IpAddress", "explanation": "The host presenting this service ticket; on its own this looks like an ordinary client-to-service request, which is exactly why the issuance/use mismatch, not this field, carries the detection signal."}
+  ],
+  "note": "Conceptual and illustrative only, constructed to show the issuance/use correlation gap described in the surrounding text — not a captured screenshot from a real Kerberos exchange or any product interface."
+}

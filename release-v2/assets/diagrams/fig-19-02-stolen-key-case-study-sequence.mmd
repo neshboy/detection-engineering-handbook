@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant Att as Attacker (leaked access key)
+    participant IAM as AWS IAM
+    participant CT as CloudTrail
+    participant S3 as S3 / RDS
+    Att->>IAM: ListUsers, GetUser, ListAttachedUserPolicies (T1580, T1069.003)
+    IAM->>CT: discovery calls logged
+    Att->>IAM: AttachUserPolicy - AdministratorAccess (T1098.003)
+    IAM->>CT: DET-19-01 candidate event
+    Att->>IAM: CreateAccessKey on compromised user (T1098.001)
+    IAM->>CT: backdoor credential logged
+    Att->>CT: StopLogging (T1562.008)
+    Note over CT: DET-19-04 zero-tolerance event -- logging gap begins
+    Att->>S3: bulk GetObject, ModifySnapshotAttribute (T1530, T1537)
+    Note over S3: no data-event record during the gap
+    Att->>CT: StartLogging (attempt to look unremarkable)
+    Note over CT: gap surfaces later via log-continuity audit

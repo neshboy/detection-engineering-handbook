@@ -1,0 +1,20 @@
+{
+  "title": "DET-28-01 detection queue entry — SSH credential-guessing against the honeynet decoy",
+  "event_type": "Google SecOps detection/case queue entry, DET-28-01 (Repeated failed SSH auth from one source against the honeynet decoy), outcome fields as surfaced to the analyst",
+  "fields": [
+    { "label": "detection_id", "value": "DET-28-01" },
+    { "label": "rule_name", "value": "det_28_01_ssh_credential_guessing_decoy" },
+    { "label": "principal.ip", "value": "176.53.159.196" },
+    { "label": "target.hostname", "value": "honeynet-ssh-decoy" },
+    { "label": "match_window", "value": "24h, 5 of 5 events" },
+    { "label": "outcome.risk_score", "value": "35" },
+    { "label": "outcome.distinct_usernames_tried", "value": "1" },
+    { "label": "mitre_technique_id", "value": "T1110.001" }
+  ],
+  "callouts": [
+    { "number": 1, "field_label": "outcome.risk_score", "explanation": "An outcome field the rule itself computed (set to 35 in the YARA-L logic) and that travels into the queue entry unchanged — the analyst reads it directly rather than re-deriving it from the raw matched events." },
+    { "number": 2, "field_label": "outcome.distinct_usernames_tried", "explanation": "The other outcome field named in the surrounding text; here it reports 1 because every attempt in Figure 28.2 reused the same support/support pair, which is itself a useful triage signal distinguishing default-credential sweeps from credential-stuffing." },
+    { "number": 3, "field_label": "principal.ip / target.hostname", "explanation": "The entity pair the rule matched on — target.hostname pinned to the decoy is what makes a count as low as five sufficient to alert, per the False Positive Trap earlier in this section." }
+  ],
+  "note": "Conceptual, illustrative rendering of what a Google SecOps detection queue entry's outcome fields would look like for this rule; not a captured screenshot of the actual product interface or a provisioned tenant."
+}

@@ -1,0 +1,21 @@
+{
+  "title": "Parser-health dashboard: per-field null-rate trend, TargetUserName step-change",
+  "event_type": "Null-rate monitoring panel, LinuxAuthEvents (sudo) log source, field-level trend for TargetUserName / user.target.name",
+  "fields": [
+    { "label": "Log Source", "value": "LinuxAuthEvents (sudo)" },
+    { "label": "Monitored Field", "value": "TargetUserName (user.target.name)" },
+    { "label": "Baseline Null Rate (90-day avg, pre-upgrade)", "value": "0.6%" },
+    { "label": "Null Rate — 2026-09-10 (day of integration upgrade)", "value": "100%" },
+    { "label": "Step-Change Magnitude", "value": "+99.4 points in a single day, no gradual drift" },
+    { "label": "Alert Threshold (from DET-05-03)", "value": "NullRatePct > 5%" },
+    { "label": "Monitor Status", "value": "ALERT — threshold breached, 2026-09-10 07:00 bucket" },
+    { "label": "Rules Depending on Field", "value": "DET-05-01 (unresilient), DET-05-02 (field-resilient)" }
+  ],
+  "callouts": [
+    { "number": 1, "field_label": "Baseline Null Rate (90-day avg, pre-upgrade)", "explanation": "Establishes the flat, near-zero noise floor a healthy trend line holds for months, which is the reference point that makes the later jump visually obvious rather than a matter of interpretation." },
+    { "number": 2, "field_label": "Null Rate — 2026-09-10 (day of integration upgrade)", "explanation": "This is the visible step-change the figure exists to illustrate: the field goes from consistently populated to consistently null in one ingest-pipeline upgrade, with no ramp-up period, matching the sudo-integration field rename described in Section 8." },
+    { "number": 3, "field_label": "Alert Threshold (from DET-05-03)", "explanation": "Shows why a standing null-rate monitor catches this within one monitoring cycle instead of requiring someone to notice a rule has gone quiet, which is the operational payoff Section 7.1 claims for this monitoring pattern." },
+    { "number": 4, "field_label": "Rules Depending on Field", "explanation": "Ties the abstract null-rate metric back to the concrete rules it protects, showing the monitor is field-centric and catches the break independent of which specific rule references the field." }
+  ],
+  "note": "Conceptual/illustrative dashboard mockup depicting a null-rate trend and step-change; not a screenshot captured from any real SIEM or monitoring product interface."
+}

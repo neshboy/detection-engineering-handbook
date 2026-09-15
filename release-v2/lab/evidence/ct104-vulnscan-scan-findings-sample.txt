@@ -1,0 +1,74 @@
+================================================================================
+SOURCE HOST/CONTAINER : CT104 "vulnscan" (vulnerability-scanner platform)
+COMMAND USED          : pct exec 104 -- bash -c "tail -n 50 /opt/vulnscan/logs/scanner.log"
+                        (via python C:/Users/User/proxmox_docs_helper.py guest 104 "tail -n 50 /opt/vulnscan/logs/scanner.log")
+CAPTURE TIMESTAMP     : 2026-09-15T08:36:46Z (capture run); log lines are from
+                        scan run 9 (2026-09-10 16:23) and the weekly scan run 10
+                        (2026-09-13 03:02 - 03:14)
+EVIDENCE TYPE         : REAL LAB EXAMPLE (genuine pre-existing vulnscan pipeline log --
+                        real nmap + CVE-matching ("vulners") scan output against real
+                        hosts on this home network)
+TELEMETRY CATEGORY    : (6) Vulnscan sample scan/finding output
+NOTES                 : Real internal-network vulnerability scan results, e.g. host
+                        192.168.1.254 (network gateway/router) returned 9 open ports and
+                        4432 CVE candidate findings (risk 100/6 Critical) -- consistent
+                        with an aging router/firmware with a large known CVE surface
+                        (matches this operator's prior documented finding that the
+                        netmonitor host's BusyBox httpd carries ~28 CVEs; here a
+                        different device shows a much larger candidate count, though
+                        "candidates" from a CPE/keyword match are not all confirmed
+                        exploitable). Scan run 10 covered 15 hosts scanned, 0 skipped,
+                        and generated 111 alerts. No secrets appear in this log; nothing
+                        redacted.
+================================================================================
+
+2026-09-10 16:23:48,249 INFO [vulnscan.scanning.cve] vulners pass for 192.168.1.120: 26 CVE candidates across 6 ports
+2026-09-10 16:23:48,251 INFO [vulnscan.pipeline] Scan complete for 192.168.1.120 (asset 19): 6 open ports, 27 findings, risk=98/0 (Critical)
+2026-09-10 16:23:48,298 INFO [vulnscan.alerts] Generated 38 alerts for scan run 9
+2026-09-10 16:23:48,299 INFO [vulnscan.scan_runner] Scan run 9 completed: 16 scanned, 2 skipped
+2026-09-13 03:02:53,166 INFO [vulnscan.scan_runner] Scan run 10 started (type=weekly, profile=normal)
+2026-09-13 03:03:42,667 INFO [vulnscan.scanning.nmap] Scan of 192.168.1.124 (normal profile): 0 open ports, os=None (None%)
+2026-09-13 03:03:42,668 INFO [vulnscan.pipeline] Scan complete for 192.168.1.124 (asset 2): 0 open ports, 0 findings, risk=0/0 (Informational)
+2026-09-13 03:03:53,122 INFO [vulnscan.scanning.nmap] Scan of 192.168.1.38 (normal profile): 1 open ports, os=Linux 5.3 - 5.4 (96%)
+2026-09-13 03:03:53,625 INFO [vulnscan.scanning.cve] vulners pass for 192.168.1.38: 26 CVE candidates across 1 ports
+2026-09-13 03:03:53,626 INFO [vulnscan.pipeline] Scan complete for 192.168.1.38 (asset 3): 1 open ports, 27 findings, risk=98/0 (Critical)
+2026-09-13 03:04:15,454 INFO [vulnscan.scanning.nmap] Scan of 192.168.1.14 (normal profile): 3 open ports, os=Linux 5.3 - 5.4 (96%)
+2026-09-13 03:04:26,157 INFO [vulnscan.scanning.cve] vulners pass for 192.168.1.14: 18 CVE candidates across 3 ports
+2026-09-13 03:04:26,158 INFO [vulnscan.pipeline] Scan complete for 192.168.1.14 (asset 1): 3 open ports, 19 findings, risk=100/0 (Critical)
+2026-09-13 03:04:58,922 INFO [vulnscan.scanning.nmap] Scan of 192.168.1.50 (normal profile): 4 open ports, os=Linux 5.3 - 5.4 (96%)
+2026-09-13 03:05:10,401 INFO [vulnscan.scanning.nmap] Scan of 192.168.1.88 (normal profile): 2 open ports, os=Linux 3.2 - 3.8 (96%)
+2026-09-13 03:05:18,863 INFO [vulnscan.scanning.cve] vulners pass for 192.168.1.88: 56 CVE candidates across 2 ports
+2026-09-13 03:05:18,865 INFO [vulnscan.pipeline] Scan complete for 192.168.1.88 (asset 5): 2 open ports, 58 findings, risk=98/0 (Critical)
+2026-09-13 03:05:20,535 INFO [vulnscan.scanning.cve] vulners pass for 192.168.1.50: 26 CVE candidates across 4 ports
+2026-09-13 03:05:20,537 INFO [vulnscan.pipeline] Scan complete for 192.168.1.50 (asset 4): 4 open ports, 27 findings, risk=98/0 (Critical)
+2026-09-13 03:05:25,525 INFO [vulnscan.scanning.nmap] Scan of 192.168.1.106 (normal profile): 1 open ports, os=Linux 5.3 - 5.4 (96%)
+2026-09-13 03:05:26,015 INFO [vulnscan.scanning.cve] vulners pass for 192.168.1.106: 26 CVE candidates across 1 ports
+2026-09-13 03:05:26,016 INFO [vulnscan.pipeline] Scan complete for 192.168.1.106 (asset 7): 1 open ports, 27 findings, risk=98/0 (Critical)
+2026-09-13 03:05:33,105 INFO [vulnscan.scanning.nmap] Scan of 192.168.1.92 (normal profile): 2 open ports, os=Linux 5.3 - 5.4 (96%)
+2026-09-13 03:05:39,648 INFO [vulnscan.scanning.nmap] Scan of 192.168.1.107 (light profile): 1 open ports, os=None (None%)
+2026-09-13 03:05:40,140 INFO [vulnscan.scanning.cve] vulners pass for 192.168.1.107: 26 CVE candidates across 1 ports
+2026-09-13 03:05:40,142 INFO [vulnscan.pipeline] Scan complete for 192.168.1.107 (asset 8): 1 open ports, 26 findings, risk=98/1 (Critical)
+2026-09-13 03:05:50,632 INFO [vulnscan.scanning.cve] vulners pass for 192.168.1.92: 26 CVE candidates across 2 ports
+2026-09-13 03:05:50,633 INFO [vulnscan.pipeline] Scan complete for 192.168.1.92 (asset 6): 2 open ports, 27 findings, risk=98/0 (Critical)
+2026-09-13 03:06:37,141 INFO [vulnscan.scanning.nmap] Scan of 192.168.1.199 (normal profile): 0 open ports, os=None (None%)
+2026-09-13 03:06:37,142 INFO [vulnscan.pipeline] Scan complete for 192.168.1.199 (asset 12): 0 open ports, 0 findings, risk=0/0 (Informational)
+2026-09-13 03:06:59,741 INFO [vulnscan.scanning.nmap] Scan of 192.168.1.125 (normal profile): 2 open ports, os=Linux 5.0 - 5.3 (98%)
+2026-09-13 03:07:06,140 INFO [vulnscan.scanning.cve] vulners pass for 192.168.1.125: 0 CVE candidates across 2 ports
+2026-09-13 03:07:06,140 INFO [vulnscan.pipeline] Scan complete for 192.168.1.125 (asset 11): 2 open ports, 0 findings, risk=0/0 (Informational)
+2026-09-13 03:07:43,455 INFO [vulnscan.scanning.nmap] Scan of 192.168.1.122 (normal profile): 1 open ports, os=Linux 3.2 - 3.16 (100%)
+2026-09-13 03:09:07,563 INFO [vulnscan.scanning.cve] vulners pass for 192.168.1.122: 0 CVE candidates across 1 ports
+2026-09-13 03:09:07,564 INFO [vulnscan.pipeline] Scan complete for 192.168.1.122 (asset 10): 1 open ports, 0 findings, risk=0/0 (Informational)
+2026-09-13 03:09:14,355 INFO [vulnscan.scanning.nmap] Scan of 192.168.1.111 (normal profile): 2 open ports, os=Linux 5.3 - 5.4 (96%)
+2026-09-13 03:09:30,314 INFO [vulnscan.scanning.nmap] Scan of 192.168.1.96 (normal profile): 2 open ports, os=Linux 5.0 - 5.2 (97%)
+2026-09-13 03:09:32,154 INFO [vulnscan.scanning.nmap] Scan of 192.168.1.254 (normal profile): 9 open ports, os=Linux 3.2 - 4.9 (100%)
+2026-09-13 03:09:42,141 INFO [vulnscan.scanning.cve] vulners pass for 192.168.1.96: 26 CVE candidates across 2 ports
+2026-09-13 03:09:42,143 INFO [vulnscan.pipeline] Scan complete for 192.168.1.96 (asset 17): 2 open ports, 28 findings, risk=98/0 (Critical)
+2026-09-13 03:10:47,002 INFO [vulnscan.scanning.cve] vulners pass for 192.168.1.111: 26 CVE candidates across 2 ports
+2026-09-13 03:10:47,004 INFO [vulnscan.pipeline] Scan complete for 192.168.1.111 (asset 9): 2 open ports, 27 findings, risk=98/0 (Critical)
+2026-09-13 03:10:48,784 INFO [vulnscan.scanning.cve] vulners pass for 192.168.1.254: 4430 CVE candidates across 9 ports
+2026-09-13 03:10:53,600 INFO [vulnscan.pipeline] Scan complete for 192.168.1.254 (asset 13): 9 open ports, 4432 findings, risk=100/6 (Critical)
+2026-09-13 03:12:47,692 INFO [vulnscan.scanning.nmap] Scan of 192.168.1.120 (normal profile): 6 open ports, os=Linux 5.3 - 5.4 (96%)
+2026-09-13 03:14:15,550 INFO [vulnscan.scanning.cve] vulners pass for 192.168.1.120: 26 CVE candidates across 6 ports
+2026-09-13 03:14:15,560 INFO [vulnscan.pipeline] Scan complete for 192.168.1.120 (asset 19): 6 open ports, 27 findings, risk=98/0 (Critical)
+2026-09-13 03:14:15,613 INFO [vulnscan.alerts] Generated 111 alerts for scan run 10
+2026-09-13 03:14:15,613 INFO [vulnscan.scan_runner] Scan run 10 completed: 15 scanned, 0 skipped

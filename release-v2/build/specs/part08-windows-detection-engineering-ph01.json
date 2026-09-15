@@ -1,0 +1,18 @@
+{
+  "title": "Audit policy precedence conflict — GPO console vs. live auditpol output",
+  "event_type": "Advanced Audit Policy Configuration, Logon subcategory, GPO editor display vs. `auditpol /get /category:*` on the same host",
+  "fields": [
+    { "label": "Category", "value": "Logon/Logoff" },
+    { "label": "Subcategory", "value": "Logon" },
+    { "label": "GPO Editor Display (Advanced Audit Policy Configuration)", "value": "Success" },
+    { "label": "auditpol Live Setting", "value": "No Auditing" },
+    { "label": "Legacy Basic Audit Policy — Logon/Logoff", "value": "Success, Failure (enabled)" },
+    { "label": "Registry Value: SCENoApplyLegacyAuditPolicy", "value": "0 (not set / not forcing advanced-policy precedence)" }
+  ],
+  "callouts": [
+    { "number": 1, "field_label": "GPO Editor Display (Advanced Audit Policy Configuration)", "explanation": "This is what an admin sees in the GPO console and reasonably trusts — it says the Logon subcategory is auditing Success events." },
+    { "number": 2, "field_label": "auditpol Live Setting", "explanation": "The actual, currently-enforced state on the host itself, queried live — shows No Auditing, meaning zero logon events are actually being recorded despite the GPO console's claim." },
+    { "number": 3, "field_label": "Registry Value: SCENoApplyLegacyAuditPolicy", "explanation": "Because this value isn't set to force advanced-policy precedence, the legacy basic audit policy silently wins the conflict and overrides the advanced subcategory setting shown in the GPO editor." }
+  ],
+  "note": "Conceptual/illustrative field breakdown of the audit-policy precedence conflict described in the Engineering Reality box; not a captured screenshot of any product interface."
+}

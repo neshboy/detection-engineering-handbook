@@ -1,0 +1,58 @@
+================================================================================
+SOURCE HOST/CONTAINER : CT113 "aeronex-legacy" (AeroNex sacrificial decoy, deliberately
+                        runs an unpatched vulnerable phpMyAdmin)
+COMMAND USED          : pct exec 113 -- bash -c "tail -n 60 /var/log/apache2/access.log"
+                        (via python C:/Users/User/proxmox_docs_helper.py guest 113 "tail -n 60 /var/log/apache2/access.log")
+CAPTURE TIMESTAMP     : 2026-09-15T08:36:46Z (capture run); log lines span 2026-09-15
+                        00:19 - 07:42
+EVIDENCE TYPE         : REAL LAB EXAMPLE (genuine pre-existing Apache access.log entries
+                        -- real internet traffic reaching this internet-exposed decoy)
+TELEMETRY CATEGORY    : (5) Honeynet attacker activity - web-layer recon/probing against
+                        the sacrificial phpMyAdmin decoy
+NOTES                 : 139.162.28.72 sends repeated empty/malformed requests (HTTP 400,
+                        blank request line) every ~30-70 minutes -- consistent with an
+                        automated uptime/liveness prober or a TCP-connect scanner that
+                        never completes a real HTTP request. 3.131.220.121 (referer
+                        "visionheight.com/scan", a scanning-service signature) issues a
+                        normal GET, then follows up with raw TLS ClientHello bytes
+                        (\x16\x03\x01...) sent to the plain-HTTP port -- a classic "is
+                        this actually a TLS port" protocol-confusion probe used by mass
+                        internet scanners. No SSH auth log activity was found on this
+                        host in the same window (journalctl -u ssh only shows the
+                        service starting), so the web layer is where this decoy's real
+                        external attacker traffic is currently visible.
+================================================================================
+
+139.162.28.72 - - [15/Sep/2026:00:19:35 +0000] "" 400 539 "-" "-"
+193.124.20.250 - - [15/Sep/2026:00:29:58 +0000] "GET / HTTP/1.1" 200 1814 "-" "Mozilla/5.0 (compatible; Infrawatch/1.0; +https://infrawat.ch/)"
+193.176.29.13 - - [15/Sep/2026:00:30:08 +0000] "GET / HTTP/1.1" 200 1129 "-" "Mozilla/5.0 (compatible; Infrawatch/1.0; +https://infrawat.ch/)"
+5.226.140.13 - - [15/Sep/2026:00:30:08 +0000] "GET /favicon.ico HTTP/1.1" 404 498 "-" "Mozilla/5.0 (compatible; Infrawatch/1.0; +https://infrawat.ch/)"
+31.14.254.55 - - [15/Sep/2026:00:30:08 +0000] "GET /api/mcp HTTP/1.1" 404 498 "-" "Mozilla/5.0 (compatible; Infrawatch/1.0; +https://infrawat.ch/)"
+81.19.219.220 - - [15/Sep/2026:00:30:08 +0000] "GET / HTTP/1.1" 200 1129 "-" "Mozilla/5.0 (compatible; Infrawatch/1.0; +https://infrawat.ch/)"
+5.226.140.19 - - [15/Sep/2026:00:30:08 +0000] "GET /mcp HTTP/1.1" 404 498 "-" "Mozilla/5.0 (compatible; Infrawatch/1.0; +https://infrawat.ch/)"
+31.14.254.36 - - [15/Sep/2026:00:30:08 +0000] "GET /mcp/ HTTP/1.1" 404 498 "-" "Mozilla/5.0 (compatible; Infrawatch/1.0; +https://infrawat.ch/)"
+195.206.182.198 - - [15/Sep/2026:00:30:09 +0000] "GET /sse HTTP/1.1" 404 498 "-" "Mozilla/5.0 (compatible; Infrawatch/1.0; +https://infrawat.ch/)"
+139.162.28.72 - - [15/Sep/2026:00:54:44 +0000] "" 400 539 "-" "-"
+139.162.28.72 - - [15/Sep/2026:02:05:08 +0000] "" 400 539 "-" "-"
+139.162.28.72 - - [15/Sep/2026:02:39:00 +0000] "" 400 539 "-" "-"
+139.162.28.72 - - [15/Sep/2026:03:11:32 +0000] "" 400 539 "-" "-"
+139.162.28.72 - - [15/Sep/2026:04:21:45 +0000] "" 400 539 "-" "-"
+139.162.28.72 - - [15/Sep/2026:04:58:55 +0000] "" 400 539 "-" "-"
+139.162.28.72 - - [15/Sep/2026:05:38:03 +0000] "" 400 539 "-" "-"
+139.162.28.72 - - [15/Sep/2026:06:12:11 +0000] "" 400 539 "-" "-"
+45.33.73.86 - - [15/Sep/2026:06:59:56 +0000] "GET / HTTP/1.0" 200 1814 "-" "-"
+3.131.220.121 - - [15/Sep/2026:07:37:54 +0000] "GET / HTTP/1.1" 200 1110 "-" "visionheight.com/scan Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Chrome/126.0.0.0 Safari/537.36"
+3.131.220.121 - - [15/Sep/2026:07:37:56 +0000] "\n" 400 539 "-" "-"
+3.131.220.121 - - [15/Sep/2026:07:39:25 +0000] "GET / HTTP/1.1" 200 1110 "-" "visionheight.com/scan Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Chrome/126.0.0.0 Safari/537.36"
+3.131.220.121 - - [15/Sep/2026:07:41:19 +0000] "\x16\x03\x01\x01" 400 539 "-" "-"
+3.131.220.121 - - [15/Sep/2026:07:42:44 +0000] "\x16\x03\x01" 400 539 "-" "-"
+
+--------------------------------------------------------------------------------
+Supplementary: CT113 ssh.service journal (journalctl -u ssh --no-pager -n 100), shown
+for completeness -- only service-start telemetry was present, no inbound SSH auth
+activity in the captured window:
+--------------------------------------------------------------------------------
+
+Sep 10 14:59:53 aeronex-legacy systemd[1]: Starting ssh.service - OpenBSD Secure Shell server...
+Sep 10 14:59:53 aeronex-legacy sshd[127]: Server listening on :: port 22.
+Sep 10 14:59:53 aeronex-legacy systemd[1]: Started ssh.service - OpenBSD Secure Shell server.

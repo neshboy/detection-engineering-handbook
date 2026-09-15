@@ -1,0 +1,21 @@
+{
+  "title": "EDR / Sysmon tamper-protection alert fired on a sensor-stop attempt",
+  "event_type": "Generic EDR/tamper-protection alert schema — triggered by a local attempt to stop the Sysmon driver/service or disable the EDR sensor",
+  "fields": [
+    { "label": "AlertName", "value": "Tamper Protection: Security sensor service stop attempted" },
+    { "label": "Hostname", "value": "WKSTN-FIN-014" },
+    { "label": "ServiceName", "value": "SysmonDrv (Sysmon64)" },
+    { "label": "TriggeringProcess", "value": "sc.exe" },
+    { "label": "ProcessCommandLine", "value": "sc.exe stop Sysmon64" },
+    { "label": "UserAccount", "value": "CORP\\jsmith (local Administrators member)" },
+    { "label": "ActionTaken", "value": "Blocked — service stop denied by tamper-protection policy" },
+    { "label": "Severity", "value": "High" }
+  ],
+  "callouts": [
+    { "number": 1, "field_label": "ServiceName", "explanation": "Identifies which sensor component was targeted; this is the exact driver/service Part 9 warns can be stopped by anyone with sufficient local privilege, silencing every downstream Sysmon-based detection with no error." },
+    { "number": 2, "field_label": "TriggeringProcess / ProcessCommandLine", "explanation": "A legitimate, signed system binary (`sc.exe`) issuing a stop command is indistinguishable by binary identity alone from routine administration — the alert has to come from the tamper-protection layer watching the target service, not from a detection on the binary itself." },
+    { "number": 3, "field_label": "ActionTaken", "explanation": "Whether the product blocks the stop attempt or only logs it after the fact is the operational difference between a prevented visibility gap and a alert that arrives after the sensor already went dark." },
+    { "number": 4, "field_label": "UserAccount", "explanation": "Confirms the attempt came from a real, sufficiently privileged local account rather than a remote or unauthenticated actor, which matters for scoping the response (compromised admin credential vs. insider vs. legitimate but unapproved change)." }
+  ],
+  "note": "Illustrative and conceptual — an invented, generic composite of the fields a working tamper-protection alert would carry, not a screenshot of any specific vendor console or captured lab event."
+}

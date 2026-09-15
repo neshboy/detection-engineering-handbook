@@ -1,0 +1,14 @@
+sequenceDiagram
+    participant Host as Linux host (sudo)
+    participant Parser as Ingest parser
+    participant Rule as DET-05-01
+
+    Host->>Parser: raw sudo line (USER=root)
+    Parser->>Rule: user.target.name = "root"
+    Rule->>Rule: user.target.name == "root" -> MATCH, alert fires
+
+    Note over Parser: Integration upgraded — target-account token now mapped to user.target.id, not user.target.name
+
+    Host->>Parser: raw sudo line (USER=root)
+    Parser->>Rule: user.target.name = null, user.target.id = "0"
+    Rule->>Rule: user.target.name == "root" -> no match, zero results, no error

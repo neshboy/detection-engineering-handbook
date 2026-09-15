@@ -1,0 +1,13 @@
+flowchart TB
+    A["DET-23-01 analytic\n(fixed definition, Part 23 Sec 1)"] --> S["Sigma\n1 YAML file\n(Part 24)"]
+    A --> K["Sentinel/Defender KQL\n1 saved query /\nscheduled rule (Part 25)"]
+    A --> P["Splunk SPL\n1 saved search\n(+ optional lookup table for the allowlist) (Part 26)"]
+    A --> Q["QRadar AQL / CRE\n3 chained objects:\nBuilding Block + Reference Set + Rule\n(Part 27)"]
+    A --> Y["YARA-L / UDM\n1 rule, broader scope --\nno GrantedAccess-equivalent field\n(Part 28)"]
+    A --> E["Elastic\nKQL filter (cheapest) or\nEQL sequence (separate, stronger analytic)\n(Part 29)"]
+    S --> C["One line of Detection Coverage,\nnot six (TERMINOLOGY.md Sec 5)"]
+    K --> C
+    P --> C
+    Q --> C
+    Y --> C
+    E --> C

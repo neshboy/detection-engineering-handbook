@@ -1,0 +1,14 @@
+flowchart TD
+    A["PR opened against rule repo"] --> B["CI stage 1:<br/>lint + metadata schema validation"]
+    B -->|"fail"| A
+    B -->|"pass"| C["CI stage 2:<br/>unit + regression tests<br/>against TP/FP fixture corpus"]
+    C -->|"fail"| A
+    C -->|"pass"| D["Reviewer approval<br/>(≠ author)"]
+    D -->|"changes requested"| A
+    D -->|"approved"| E["Merge-approver merges to main<br/>(≠ author, ≠ reviewer)"]
+    E --> F["CD: tag release version,<br/>deploy to staging"]
+    F --> G["CD: staged/canary rollout<br/>to production"]
+    G --> H["Monitoring:<br/>alert volume, rule failure rate"]
+    H -->|"regression detected"| I["Rollback:<br/>revert commit,<br/>redeploy prior tagged version"]
+    I --> F
+    H -->|"healthy"| J["Production, monitored<br/>on Last Tested cadence"]

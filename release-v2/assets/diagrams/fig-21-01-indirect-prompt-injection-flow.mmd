@@ -1,0 +1,12 @@
+flowchart TD
+    A["User prompt:<br/>'Summarize this ticket and check the linked doc'"] --> B["Agent orchestrator"]
+    B --> C["Tool call: fetch_url / retrieve_document"]
+    C --> D["External or attacker-controlled document"]
+    D -->|"hidden instruction embedded in retrieved text"| E["Model context window"]
+    E --> F["Agent reasoning now includes<br/>the attacker's injected instruction"]
+    F --> G["Tool call: send_email / execute_code"]
+    G --> H["Attacker-controlled destination<br/>or unintended action"]
+    B -.->|"audit event: prompt.received"| I[("AI gateway / audit log — Part 20")]
+    C -.->|"audit event: retrieval.performed"| I
+    G -.->|"audit event: tool_call.performed"| I
+    I --> J["DET-21-01: intent-divergence check"]

@@ -1,0 +1,21 @@
+{
+  "title": "Per-entity baseline scorecard — user account, SSH auth-rate feature",
+  "event_type": "Baseline-lookup scorecard view for one entity/feature pair (analogous to DET-31-01's ssh_auth_baseline.csv row plus the current hour's scored observation)",
+  "fields": [
+    { "label": "entity", "value": "user=jsmith" },
+    { "label": "feature", "value": "ssh_failed_auth_rate @ hour_of_day=03" },
+    { "label": "observed_value", "value": "attempts=7 (current hour)" },
+    { "label": "baseline_range", "value": "baseline_mean=0.4, baseline_stdev=0.7 (typical 0-2/hr)" },
+    { "label": "deviation_score", "value": "zscore=9.14" },
+    { "label": "sample_hours", "value": "712 (30-day rolling window)" },
+    { "label": "model_last_updated", "value": "2026-09-14T23:07:00Z" },
+    { "label": "staleness_check", "value": "fresh — last rebuild 11h ago, on schedule" }
+  ],
+  "callouts": [
+    { "number": 1, "field_label": "observed_value", "explanation": "The raw count being scored this hour — on its own, too low to trip any fixed-threshold rule, which is exactly the case this part's machinery exists to catch." },
+    { "number": 2, "field_label": "baseline_range", "explanation": "The learned normal range for this specific entity and hour, not a global constant — the same seven attempts would score very differently against a noisier account's baseline." },
+    { "number": 3, "field_label": "deviation_score", "explanation": "The number that actually drives the alert decision; this is what turns 'seven attempts' into a claim about how unusual seven attempts is for this account." },
+    { "number": 4, "field_label": "model_last_updated", "explanation": "The field named in §1's Engineering Reality box and §9's closing paragraph — without a visible staleness check, a scorecard built from six-week-old history looks identical to a fresh one." }
+  ],
+  "note": "Illustrative/conceptual rendering of what a per-entity baseline scorecard's fields would contain; not a captured screenshot of any UEBA or analytics product interface."
+}

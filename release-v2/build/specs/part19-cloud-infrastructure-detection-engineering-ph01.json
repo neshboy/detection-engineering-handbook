@@ -1,0 +1,21 @@
+{
+  "title": "CloudTrail PutBucketPolicy event — DET-19-02 Detection Test",
+  "event_type": "AWS CloudTrail management event, eventSource s3.amazonaws.com, eventName PutBucketPolicy",
+  "fields": [
+    { "label": "eventName", "value": "PutBucketPolicy" },
+    { "label": "eventSource", "value": "s3.amazonaws.com" },
+    { "label": "eventTime", "value": "2026-09-15T14:32:07Z" },
+    { "label": "userIdentity.arn", "value": "arn:aws:iam::123456789012:user/sandbox-test-user" },
+    { "label": "requestParameters.bucketName", "value": "det19-sandbox-bucket" },
+    { "label": "requestParameters.bucketPolicy", "value": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":\"s3:GetObject\",\"Resource\":\"arn:aws:s3:::det19-sandbox-bucket/*\"}]}" },
+    { "label": "sourceIPAddress", "value": "203.0.113.42" },
+    { "label": "awsRegion", "value": "us-east-1" }
+  ],
+  "callouts": [
+    { "number": 1, "field_label": "eventName", "explanation": "PutBucketPolicy is one of the two calls (with PutBucketAcl) that actually writes a public grant — this is the specific API the DET-19-02 query filters on." },
+    { "number": 2, "field_label": "requestParameters.bucketPolicy", "explanation": "The embedded policy document's bare-string \"Principal\": \"*\" with no narrowing Condition is exactly the pattern the query's principal_wildcard/has_narrowing_condition logic is built to catch." },
+    { "number": 3, "field_label": "requestParameters.bucketName", "explanation": "Identifies which bucket was exposed — the field the query surfaces in its output table for triage." },
+    { "number": 4, "field_label": "userIdentity.arn", "explanation": "Identifies the throwaway sandbox principal that made the call, matching the Detection Test's setup of a non-allowlisted IAM user." }
+  ],
+  "note": "Illustrative/conceptual field breakdown of a CloudTrail PutBucketPolicy event as it would appear for the Detection Test scenario; not a captured screenshot or real vendor console rendering."
+}

@@ -1,0 +1,10 @@
+flowchart LR
+    A[User attempts sign-in] --> B{Modern auth protocol?}
+    B -- yes --> C[Conditional access policy evaluated]
+    C --> D{Policy satisfied?<br/>MFA, device, location}
+    D -- yes --> E[Resource access granted]
+    D -- no --> F[Blocked / additional challenge]
+    B -- no, legacy protocol --> G[Reduced or no CA evaluation<br/>depending on policy scope]
+    G --> E
+    H[Attacker captures session token<br/>via AiTM proxy, post-MFA] --> I[Token replayed from<br/>attacker infrastructure]
+    I --> E

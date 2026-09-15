@@ -1,0 +1,16 @@
+flowchart LR
+    ALERT["Alert fires\n(Detection Rule)"] --> DISP["Disposition\n(TP / BP / FP / UTD)\nSection 2"]
+    DISP --> PREC["Precision\nSection 3"]
+    DISP --> ESC["Case / Incident\nescalation path\nSection 5"]
+    DISP --> HANDLE["Handling time\nSection 6"]
+    TEST["Adversary Emulation /\nAtomic Test results"] --> RECALL["Recall estimate\nSection 4"]
+    COV["Coverage tier\n(Part 41)"] --> SCORE["Per-analytic\nquality scorecard\nSection 13"]
+    PREC --> SCORE
+    RECALL --> SCORE
+    HANDLE --> SCORE
+    ESC --> SCORE
+    AGE["Testing age /\nlast-validated date\nSection 8"] --> SCORE
+    SUPP["Exception-ledger audit\nDET-42-01\nSection 9"] --> SCORE
+    HEALTH["Rule-failure canary\nDET-42-02\nSection 10"] --> SCORE
+    SCORE --> TUNE["Tuning backlog\n(Part 38)"]
+    SCORE --> DEBT["Detection Debt ledger\n(Part 43)"]

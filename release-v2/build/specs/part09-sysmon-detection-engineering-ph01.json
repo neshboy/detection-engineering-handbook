@@ -1,0 +1,21 @@
+{
+  "title": "Correlated file staging and deletion via ProcessGuid (Sysmon Event ID 11 / Event ID 23)",
+  "event_type": "Microsoft-Windows-Sysmon/Operational channel — linked Event ID 1 (Process Create), Event ID 11 (FileCreate), and Event ID 23 (FileDelete) entries joined on ProcessGuid",
+  "fields": [
+    { "label": "ProcessGuid (join key)", "value": "{4f3a1e2c-9d21-6512-2400-0000000a3f01}" },
+    { "label": "Event ID 1 — Image", "value": "C:\\Users\\jsmith\\AppData\\Local\\Temp\\update_svc.exe" },
+    { "label": "Event ID 1 — CommandLine", "value": "update_svc.exe -silent -stage" },
+    { "label": "Event ID 11 — UtcTime (create)", "value": "2026-09-10 14:02:17.331" },
+    { "label": "Event ID 11 — TargetFilename", "value": "C:\\Users\\jsmith\\AppData\\Local\\Temp\\payload_cache.dat" },
+    { "label": "Event ID 23 — UtcTime (delete)", "value": "2026-09-10 14:02:49.885" },
+    { "label": "Event ID 23 — TargetFilename", "value": "C:\\Users\\jsmith\\AppData\\Local\\Temp\\payload_cache.dat" },
+    { "label": "Event ID 23 — Hash (SHA256)", "value": "9F2C7B1A4E6D0F3C8B5A2E1D9C4F7A6B3E0D1C2A5B8F9E4D7C0A3B6E9F2C1A4D" }
+  ],
+  "callouts": [
+    { "number": 1, "field_label": "ProcessGuid (join key)", "explanation": "The durable correlation key that ties the process-creation event to the file-create and file-delete events it later generates; the raw PID would be unreliable here since it can recycle before the delete event fires." },
+    { "number": 2, "field_label": "Event ID 11 — TargetFilename / Event ID 23 — TargetFilename", "explanation": "The identical path across the create and delete events establishes the create-then-delete lifecycle for one staged file, the specific pattern this subsection describes as an anti-forensics indicator." },
+    { "number": 3, "field_label": "Event ID 23 — UtcTime (delete)", "explanation": "A short interval between the Event ID 11 create time and this delete time (roughly 32 seconds here) is consistent with a payload being staged, used, and then removed shortly after execution rather than routine, unrelated file cleanup." },
+    { "number": 4, "field_label": "Event ID 23 — Hash (SHA256)", "explanation": "Only populated if the Sysmon config retains deleted-file content hashing; without it, the deleted file's identity can only be inferred from the path, not confirmed against the file that was created." }
+  ],
+  "note": "Illustrative and conceptual — a composite, invented example of correlated Sysmon fields for teaching purposes, not a captured screenshot of any real Event Viewer or SIEM interface."
+}

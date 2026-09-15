@@ -1,0 +1,19 @@
+{
+  "title": "WAF-blocked request with matched rule, anomaly score, and bot verdict",
+  "event_type": "WAF/CDN edge console — blocked-request detail view (e.g., ModSecurity CRS-style engine)",
+  "fields": [
+    {"label": "Request", "value": "POST /GponForm/diag_Form HTTP/1.1"},
+    {"label": "Source IP", "value": "223.123.43.135"},
+    {"label": "Matched rule ID", "value": "942100 — SQL Injection Attack Detected"},
+    {"label": "Anomaly score", "value": "15 (block threshold: 5)"},
+    {"label": "Bot classification", "value": "Automated — verified malicious scanner"},
+    {"label": "Action taken", "value": "Blocked"},
+    {"label": "User agent", "value": "Mozilla/5.0 (compatible; Infrawatch/1.0; +https://infrawat.ch/)"}
+  ],
+  "callouts": [
+    {"number": 1, "field_label": "Matched rule ID", "explanation": "A plain origin access log has no concept of a 'matched rule' — this field only exists because a WAF layer sits in front of the origin and makes an allow/block decision based on signature matching."},
+    {"number": 2, "field_label": "Anomaly score", "explanation": "The anomaly/risk score is a WAF-specific computed value (common in CRS-style engines) that aggregates multiple weak signals into a single decision threshold — a plain access log has no equivalent field."},
+    {"number": 3, "field_label": "Bot classification", "explanation": "Bot-classification verdicts require behavioral/fingerprinting analysis a plain web server never performs, illustrating why a WAF-fronted log is a structurally different data source, not the same log with extra columns."}
+  ],
+  "note": "Illustrative/conceptual mockup of a WAF/CDN console blocked-request view; not a captured screenshot of any real vendor product."
+}

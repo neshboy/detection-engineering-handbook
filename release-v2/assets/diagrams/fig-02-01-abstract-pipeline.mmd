@@ -1,0 +1,9 @@
+flowchart LR
+    A["Attacker action"] --> B["OS / API call"]
+    B --> C["Artifact"]
+    C --> D["Log"]
+    D --> E["Collector"]
+    E --> F["Parser"]
+    F --> G["Normalisation"]
+    G --> H["SIEM / lake"]
+    H --> I["Analytic"]

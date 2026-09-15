@@ -1,0 +1,21 @@
+{
+  "title": "DET-26-02 SSH failed-authentication burst — search result row",
+  "event_type": "Splunk SPL query result table, DET-26-02 (index=linux_auth sourcetype=sshd, stats-by-src_ip output)",
+  "fields": [
+    { "label": "src_ip", "value": "192.168.1.126" },
+    { "label": "raw_failed_lines", "value": "47" },
+    { "label": "distinct_connections", "value": "9" },
+    { "label": "distinct_usernames", "value": "2" },
+    { "label": "usernames", "value": "admin, root" },
+    { "label": "first_attempt", "value": "2026-09-14 01:04:12" },
+    { "label": "last_attempt", "value": "2026-09-14 01:07:45" },
+    { "label": "window_seconds", "value": "213" }
+  ],
+  "callouts": [
+    { "number": 1, "field_label": "src_ip", "explanation": "The single source address the stats command grouped on; every other column in this row describes only this host's behavior, which is what lets an analyst treat the row as one candidate brute-force source." },
+    { "number": 2, "field_label": "raw_failed_lines", "explanation": "47 failed lines against only 9 distinct connections shows OpenSSH's per-connection retry batching (MaxAuthTries) in action — this is the field DET-26-02 added specifically because distinct_connections alone would undercount the real attempt volume." },
+    { "number": 3, "field_label": "usernames", "explanation": "Only two account names (admin, root) targeted despite dozens of attempts is the credential-guessing signature the rule's threat hypothesis names explicitly, distinguishing this from a broad username-enumeration sweep." },
+    { "number": 4, "field_label": "window_seconds", "explanation": "213 seconds falls under the rule's 300-second cap, which is the explicit burst-speed bound DET-26-02 adds on top of DET-03-01 — this is the field that turns 'many failures' into 'many failures, fast.'" }
+  ],
+  "note": "Illustrative/conceptual mock-up of a Splunk search-results row for teaching purposes; not a captured screenshot of a real Splunk deployment or its interface."
+}

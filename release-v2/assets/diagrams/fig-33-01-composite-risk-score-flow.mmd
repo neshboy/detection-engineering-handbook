@@ -1,0 +1,21 @@
+flowchart TB
+    subgraph INPUTS["Per-entity signal inputs (Section 2)"]
+        P["Identity privilege\nweighting (2.1)"]
+        A["Asset importance\n(2.2)"]
+        R["Statistical rarity\n(2.3, Part 31 baseline)"]
+        T["Threat-intel confidence\n(2.4, Part 32)"]
+        D["Detection/analytic\nconfidence (2.5)"]
+        K["Kill-chain stage\n(Section 3)"]
+    end
+    P --> SUM["Composite score\n(additive combination)"]
+    A --> SUM
+    R --> SUM
+    T --> SUM
+    D --> SUM
+    K --> SUM
+    SUM --> CTX{"Context modifiers\n(known-internal source,\nchange window, allowlist)\n-- Section 5 fix"}
+    CTX -->|"suppressed"| LOW["Below threshold --\nno alert, logged for audit"]
+    CTX -->|"not suppressed"| THRESH{"Threshold crossed?"}
+    THRESH -->|"no"| LOW
+    THRESH -->|"yes, general score"| ANALYST["Analyst-routed alert\n(SOC Management View)"]
+    THRESH -->|"yes, confirmed_postexploit\nstage only"| AUTO["Automated response\n(highest-confidence path only)"]

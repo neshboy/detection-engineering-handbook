@@ -1,0 +1,20 @@
+{
+  "title": "API key request-rate spike across multiple source ASNs within one hour",
+  "event_type": "AI API gateway authentication log, hourly aggregation, sourcetype api_auth (supports DET-21-06)",
+  "fields": [
+    { "label": "_time (hour bucket)", "value": "2026-09-15T14:00:00Z" },
+    { "label": "api_key_id", "value": "ak_7f3d9c2e1b40" },
+    { "label": "key_type", "value": "interactive" },
+    { "label": "requests", "value": 842 },
+    { "label": "distinct_asns", "value": 6 },
+    { "label": "distinct_models", "value": 3 },
+    { "label": "prior_7d_avg_requests_per_hour", "value": 38 }
+  ],
+  "callouts": [
+    { "number": 1, "field_label": "distinct_asns", "explanation": "Six distinct source ASNs for one key inside a single hour clears the tuned distinct_asns >= 4 bar DET-21-06 uses instead of a naive distinct_asns > 1 threshold, which would false-positive on ordinary roaming interactive use." },
+    { "number": 2, "field_label": "requests", "explanation": "842 requests against a 7-day trailing average of 38 per hour is the request-rate-spike leg of the detection, evaluated alongside — not instead of — the ASN-diversity signal." },
+    { "number": 3, "field_label": "key_type", "explanation": "Tags this key as interactive rather than a service/backend key; DET-21-06's False Positive Trap calls for separate thresholds per key_type since service keys behind autoscaling infrastructure legitimately span many ASNs." },
+    { "number": 4, "field_label": "distinct_models", "explanation": "Surfaced for analyst sanity-checking against the key's known model-tier list, per the prose above the query — not yet thresholded on as a standalone trigger in DET-21-06 itself." }
+  ],
+  "note": "This is a conceptual, illustrative field breakdown of an API usage aggregation row to support DET-21-06 — not a captured screenshot of any real vendor dashboard."
+}

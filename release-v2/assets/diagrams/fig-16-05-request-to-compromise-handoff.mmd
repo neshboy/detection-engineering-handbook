@@ -1,0 +1,7 @@
+flowchart LR
+    A["HTTP request lands\n(method, path, params, headers, body)"] --> B["Web/app layer:\nthis part's detections\n(injection, traversal, SSRF,\nupload, scan/bot, API abuse)"]
+    B --> C{"Payload succeeds against\nthe application?"}
+    C -->|No| D["Logged attempt only --\nDET-16-01..08 candidates"]
+    C -->|Yes, drops a web shell| E["Web-server process spawns\na shell/interpreter --\nDET-16-04, Part 11 boundary"]
+    E --> F["Host telemetry: process\nlineage, file writes\n(Part 11 owns this layer)"]
+    E --> G["Network telemetry: outbound\nconnection from the web tier\n(Part 14 owns this layer)"]
