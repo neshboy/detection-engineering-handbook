@@ -82,6 +82,26 @@ The honeynet correlation output this book reuses across several earlier parts (F
 
 **Recall's real limitation:** it is only as good as the ground truth it's measured against, and ground truth in production is itself a product of the same hunting and IR capability the recall figure is supposedly evaluating — a genuinely weak hunting program produces both a low true recall and a falsely reassuring high measured recall, because the intrusions it never found never make it into the ground-truth list to be missed against.
 
+**Precision and recall in full: the confusion matrix underneath them.** Both metrics above are drawn from the same underlying 2×2 confusion matrix. Defined against a single fired-or-not-fired alert: TP is a real intrusion correctly alerted; FP is benign activity incorrectly alerted; TN is benign activity correctly not alerted; FN is a real intrusion missed. Two of those four cells never produce a disposition for an analyst to record — TN and FN are, respectively, "benign activity nobody alerted on" and "an intrusion nobody caught" — which is exactly why recall above has to be estimated from a separate, deliberately constructed ground-truth sample rather than read directly off the same disposition table (§2) precision's figure comes from.
+
+```
+Precision (Positive Predictive Value)     = TP / (TP + FP)
+Recall (Sensitivity, True Positive Rate)  = TP / (TP + FN)
+Specificity (True Negative Rate)          = TN / (TN + FP)
+False Positive Rate (FPR)                 = FP / (FP + TN) = 1 - Specificity
+F1 score                                  = 2 * (Precision * Recall) / (Precision + Recall)
+```
+
+- TP — a real intrusion correctly alerted
+- FP — benign activity incorrectly alerted
+- TN — benign activity correctly not alerted
+- FN — a real intrusion missed
+- Precision — of the alerts this analytic fired, the fraction that were correct (§3)
+- Recall — of the intrusions that actually occurred, the fraction this analytic caught (this section)
+- Specificity — of the benign activity that actually occurred, the fraction correctly left un-alerted
+- FPR — of the benign activity that actually occurred, the fraction incorrectly alerted — the figure §5's base-rate-fallacy discussion turns on
+- F1 — the harmonic mean of precision and recall; a single blended figure, useful only when a reader genuinely needs both weighted equally rather than silently favoring one (§13)
+
 ---
 
 ## 5. Alert-to-incident ratio
@@ -89,6 +109,20 @@ The honeynet correlation output this book reuses across several earlier parts (F
 **[SOC MANAGEMENT]** The alert-to-incident ratio is the count of Alerts generated over a period divided by the count of formally declared Incidents (TERMINOLOGY.md § Incident) over the same period — a coarse, program-level signal-to-noise indicator, not a per-rule metric. A SOC ingesting roughly 12,000 alerts a month across all analytics, of which 340 get escalated into a Case (TERMINOLOGY.md § Case) and five of those Cases go on to a formally declared Incident, has an alert-to-incident ratio of roughly 2,400:1 for that month. A ratio this lopsided is not, by itself, evidence of badly built analytics — it is the program-level shape of what intrusion-detection research calls the base-rate fallacy: because genuinely malicious activity is a tiny fraction of total monitored activity, even analytics with respectable individual precision (§3) still produce an aggregate alert stream dominated by non-incidents once that precision is multiplied across realistic event volume (Axelsson, "The Base-Rate Fallacy and the Difficulty of Intrusion Detection," *ACM Transactions on Information and System Security*, Vol. 3, No. 3, 2000: https://doi.org/10.1145/357830.357849).
 
 *(CONCEPTUAL SAMPLE — illustrative monthly volumes, not captured from a live program.)*
+
+Axelsson's paper states this collapse formally, in Bayesian terms, rather than just observing it empirically. Using his paper's own notation: P(I) is the base rate — the prior probability that any given monitored event is a real intrusion; P(A|I) is the true positive rate — the probability of an alarm given that a real intrusion occurred; P(A|not I) is the false positive rate — the probability of an alarm given that no intrusion occurred. The quantity that actually matters operationally, the Bayesian detection rate P(I|A), is the probability that a fired alarm indicates a real intrusion:
+
+```
+P(I|A) = [ P(A|I) * P(I) ] / [ P(A|I) * P(I) + P(A|not I) * P(1-I) ]
+```
+
+- P(I) — the base rate: the prior probability that a given monitored event is a real intrusion
+- P(A|I) — the true positive rate: the probability of an alarm, given that a real intrusion occurred
+- P(A|not I) — the false positive rate: the probability of an alarm, given that no intrusion occurred
+- P(1-I) — the probability that no intrusion occurred (1 minus the base rate)
+- P(I|A) — the Bayesian detection rate: the probability that a real intrusion occurred, given that an alarm fired — the number an analyst actually needs, and the one this section's alert-to-incident ratio is only a coarse, program-level proxy for
+
+P(I) being tiny — a real intrusion is a vanishingly small fraction of all monitored activity, exactly as the 12,000-alert example above illustrates — is exactly why P(I|A) collapses toward zero even when P(A|I) and P(A|not I) individually look respectable: the false-positive term is multiplied against the overwhelming majority share, P(1-I), while the true-positive term is multiplied against the tiny minority share, P(I), so a low base rate punishes any nonzero false-positive rate far more than the numerator can compensate for.
 
 > **SOC Management View**
 > This ratio gets quoted in budget conversations as a proxy for "is the SOC drowning in noise," and it's a legitimate one to raise — but a ratio that improves from 2,400:1 to 3,600:1 month over month is consistent with two very different realities: genuinely better precision pushing bad alerts out of the top of the funnel before they ever reach a Case, or a quieter, harder-to-defend shift toward under-declaring Incidents to make the number look better. The ratio alone cannot distinguish these. Pair any reported change in this ratio with a parallel recall signal — testing results, hunt findings, or a documented rationale for why fewer Cases escalated — before treating an improving ratio as good news on its own.
