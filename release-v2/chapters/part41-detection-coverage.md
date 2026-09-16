@@ -75,9 +75,6 @@ flowchart LR
     B -.->|"log source decommissioned or defunded"| A
 ```
 
-![part41-detection-coverage-fig01](../assets/diagrams/part41-detection-coverage-fig01.svg)
-
-
 ![Figure 41.1 — The six-tier detection coverage model, with promotion and regression paths](../assets/diagrams/fig-41-01-six-tier-coverage-model.svg)
 
 > **Blind Spot**
@@ -257,9 +254,6 @@ flowchart TD
     V -->|"yes"| W["last_validated refreshed; tier confirmed or adjusted from new evidence"]
     V -->|"no"| X["Row auto-demoted one tier; heatmap cell recolors on its own"]
 ```
-
-![part41-detection-coverage-fig02](../assets/diagrams/part41-detection-coverage-fig02.svg)
-
 
 ![Figure 41.2 — The coverage-staleness detection loop](../assets/diagrams/fig-41-02-coverage-staleness-detection-loop.svg)
 

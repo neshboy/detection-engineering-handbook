@@ -45,9 +45,6 @@ flowchart TD
     H -.->|"drift or gap suspected"| B
 ```
 
-![part36-hunt-to-detection-fig01](../assets/diagrams/part36-hunt-to-detection-fig01.svg)
-
-
 ![Figure 36.1 — Hunt-to-detection sequence, with the loop back into Part 22's pipeline](../assets/diagrams/fig-36-01-hunt-to-detection-sequence.svg)
 
 **[THREAT HUNTER]** Two exit points on that diagram matter as much as the happy path. A finding can legitimately die at stage 1 or stage 2 — the rest of this part, and its worked example, cover the case where it doesn't, but §9 covers the case where it correctly does, because a hunt program that turns every finding into a new standing rule regardless of whether the pattern generalizes is building rule sprawl, not detection coverage.

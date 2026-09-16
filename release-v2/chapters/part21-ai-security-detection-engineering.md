@@ -75,9 +75,6 @@ flowchart TD
     I --> J["DET-21-01: intent-divergence check"]
 ```
 
-![part21-ai-security-detection-engineering-fig01](../assets/diagrams/part21-ai-security-detection-engineering-fig01.svg)
-
-
 ![Figure 21.1 — Indirect prompt injection data flow and audit points](../assets/diagrams/fig-21-01-indirect-prompt-injection-flow.svg)
 
 ### 2.3 DET-21-01 — Intent-divergence detection for indirect injection
@@ -295,9 +292,6 @@ flowchart TD
     D -->|No| F["Lower risk: at least one leg<br/>of the chain is missing"]
     E --> G["DET-21-05: session-level trifecta scoring"]
 ```
-
-![part21-ai-security-detection-engineering-fig02](../assets/diagrams/part21-ai-security-detection-engineering-fig02.svg)
-
 
 ![Figure 21.2 — The lethal trifecta as a session-level convergence condition](../assets/diagrams/fig-21-02-lethal-trifecta-convergence.svg)
 

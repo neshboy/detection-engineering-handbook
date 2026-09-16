@@ -48,9 +48,6 @@ flowchart LR
     H --> I["Analytic"]
 ```
 
-![part02-from-attack-to-telemetry-fig01](../assets/diagrams/part02-from-attack-to-telemetry-fig01.svg)
-
-
 ![Figure 2.1 — The abstract telemetry pipeline](../assets/diagrams/fig-02-01-abstract-pipeline.svg)
 
 Only the last hop produces a verdict. Everything before it is telemetry — data that exists in the pipeline, per the TERMINOLOGY.md definition — and telemetry existing is not the same claim as a technique being detectable. A log source can be fully present at hop 4 and still deliver nothing usable at hop 9 because hops 5 through 8 quietly broke it.
@@ -179,9 +176,6 @@ flowchart LR
     H --> I["Analytic<br/>DET-02-01 flags EncodedCommand plus<br/>high command-line length"]
 ```
 
-![part02-from-attack-to-telemetry-fig02](../assets/diagrams/part02-from-attack-to-telemetry-fig02.svg)
-
-
 ![Figure 2.2 — The encoded PowerShell launch traced through all nine hops](../assets/diagrams/fig-02-02-powershell-worked-example.svg)
 
 > **Blind Spot**
@@ -214,9 +208,6 @@ sequenceDiagram
     Lake->>Analytic: Rule evaluates against normalised event
     Analytic->>Analytic: DET-02-01 fires if pattern matches
 ```
-
-![part02-from-attack-to-telemetry-fig03](../assets/diagrams/part02-from-attack-to-telemetry-fig03.svg)
-
 
 ![Figure 2.3 — Failure points along the encoded PowerShell pipeline](../assets/diagrams/fig-02-03-failure-points-sequence.svg)
 

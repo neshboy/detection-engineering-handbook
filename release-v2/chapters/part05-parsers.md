@@ -150,9 +150,6 @@ flowchart LR
     M3 --> N
 ```
 
-![part05-parsers-fig01](../assets/diagrams/part05-parsers-fig01.svg)
-
-
 ![Figure 5.1 — Parser-health monitoring attached to the ingest pipeline](../assets/diagrams/fig-05-01-parser-health-monitoring.svg)
 
 > **Detection Test**
@@ -364,9 +361,6 @@ sequenceDiagram
     Parser->>Rule: user.target.name = null, user.target.id = "0"
     Rule->>Rule: user.target.name == "root" -> no match, zero results, no error
 ```
-
-![part05-parsers-fig02](../assets/diagrams/part05-parsers-fig02.svg)
-
 
 ![Figure 5.2 — Before and after the field rename](../assets/diagrams/fig-05-02-field-rename-before-after.svg)
 

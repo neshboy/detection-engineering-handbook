@@ -12,6 +12,11 @@ DIAGRAM_DIR = os.path.join(ROOT, "assets", "diagrams")
 os.makedirs(DIAGRAM_DIR, exist_ok=True)
 
 MERMAID_RE = re.compile(r"```mermaid\r?\n(.*?)```", re.DOTALL)
+# Matches an existing rendered image (or a previous failure marker) that already
+# immediately follows a mermaid fence, allowing the blank lines this script (and
+# hand-authored figures) normally leave between the fence and the image.
+NEXT_IMG_RE = re.compile(r"(?:\r?\n)*!\[[^\]]*\]\(([^)]+)\)")
+NEXT_FAILURE_RE = re.compile(r"(?:\r?\n)*<!-- RENDER FAILED[^>]*-->")
 MMDC_CMD = ["npx", "-y", "@mermaid-js/mermaid-cli"]
 
 def slug_for(path):
@@ -48,9 +53,33 @@ def process_file(path):
     for i, m in enumerate(matches, start=1):
         mmd_text = m.group(1)
         fig_name = f"{slug}-fig{i:02d}"
-        out_svg = os.path.join(DIAGRAM_DIR, fig_name + ".svg")
         rel_path = f"../assets/diagrams/{fig_name}.svg"
 
+        insert_at = m.end() + offset
+
+        # Idempotency: if an image already immediately follows this mermaid
+        # fence (a prior run of this script, or a hand-placed captioned
+        # figure), re-render into that existing file in place instead of
+        # inserting a second, duplicate image reference. If a previous
+        # RENDER FAILED marker is there instead, consume it and retry fresh.
+        existing_img = NEXT_IMG_RE.match(new_content, insert_at)
+        existing_failure = None if existing_img else NEXT_FAILURE_RE.match(new_content, insert_at)
+
+        if existing_img:
+            out_svg = os.path.normpath(os.path.join(os.path.dirname(path), existing_img.group(1)))
+            ok, out, err = render_one(mmd_text, out_svg)
+            if ok:
+                rendered += 1
+            else:
+                failed += 1
+            continue
+
+        if existing_failure:
+            removed_len = existing_failure.end() - insert_at
+            new_content = new_content[:insert_at] + new_content[existing_failure.end():]
+            offset -= removed_len
+
+        out_svg = os.path.join(DIAGRAM_DIR, fig_name + ".svg")
         ok, out, err = render_one(mmd_text, out_svg)
         if ok:
             rendered += 1

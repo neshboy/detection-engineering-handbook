@@ -167,9 +167,6 @@ flowchart LR
     M --> N["DET-10-01 / DET-10-02"]
 ```
 
-![part10-powershell-detection-engineering-fig01](../assets/diagrams/part10-powershell-detection-engineering-fig01.svg)
-
-
 ![PowerShell telemetry and network-correlation pipeline](../assets/diagrams/fig-10-01-powershell-telemetry-pipeline.svg)
 
 The DNS side of that join has real structure worth grounding in an actual log, not an invented one:

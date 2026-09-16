@@ -82,9 +82,6 @@ flowchart LR
     C -->|"merges to main"| E["main branch<br/>(release-eligible)"]
 ```
 
-![part22-detection-as-code-fig01](../assets/diagrams/part22-detection-as-code-fig01.svg)
-
-
 ![Figure 22.1 — Three-role separation of duties enforced by branch protection](../assets/diagrams/fig-22-01-separation-of-duties-gate.svg)
 
 > **SOC Management View**
@@ -370,9 +367,6 @@ flowchart TD
     I --> F
     H -->|"healthy"| J["Production, monitored<br/>on Last Tested cadence"]
 ```
-
-![part22-detection-as-code-fig02](../assets/diagrams/part22-detection-as-code-fig02.svg)
-
 
 ![Figure 22.2 — The detection-as-code CI/CD pipeline, PR to production, with the rollback loop](../assets/diagrams/fig-22-02-detection-as-code-cicd-pipeline.svg)
 

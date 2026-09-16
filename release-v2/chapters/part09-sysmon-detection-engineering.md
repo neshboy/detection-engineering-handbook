@@ -49,9 +49,6 @@ flowchart LR
     F --> G["Detection Rule evaluates\n(e.g., DET-09-01)"]
 ```
 
-![part09-sysmon-detection-engineering-fig01](../assets/diagrams/part09-sysmon-detection-engineering-fig01.svg)
-
-
 ![Sysmon event data flow, kernel to detection rule](../assets/diagrams/fig-09-01-sysmon-event-data-flow.svg)
 
 ---

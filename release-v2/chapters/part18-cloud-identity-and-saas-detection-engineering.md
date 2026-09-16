@@ -67,9 +67,6 @@ sequenceDiagram
     end
 ```
 
-![part18-cloud-identity-and-saas-detection-engineering-fig01](../assets/diagrams/part18-cloud-identity-and-saas-detection-engineering-fig01.svg)
-
-
 ![Figure 18.1 — Illicit consent grant attack flow](../assets/diagrams/fig-18-01-illicit-consent-grant-flow.svg)
 
 > **Detection Autopsy — "any consent grant to a high-privilege scope is malicious"**
@@ -226,9 +223,6 @@ flowchart LR
     H[Attacker captures session token<br/>via AiTM proxy, post-MFA] --> I[Token replayed from<br/>attacker infrastructure]
     I --> E
 ```
-
-![part18-cloud-identity-and-saas-detection-engineering-fig02](../assets/diagrams/part18-cloud-identity-and-saas-detection-engineering-fig02.svg)
-
 
 ![Figure 18.2 — Three paths to the same resource-access outcome](../assets/diagrams/fig-18-02-conditional-access-bypass-paths.svg)
 
