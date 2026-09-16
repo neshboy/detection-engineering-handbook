@@ -187,7 +187,7 @@ flowchart LR
 
 ### 3.1 Signature-anchored detection
 
-**[DETECTION ENGINEER]** At one end, the match is against a specific, low-durability artifact — a hash, a domain, a known-bad source IP — what TERMINOLOGY.md defines as an `IOC`. The interpretation load is nearly zero: either the artifact is present or it isn't. That's also the failure mode — it stops working the instant the artifact changes, which is why an attacker who rotates infrastructure defeats it for free.
+**[DETECTION ENGINEER]** At one end, the match is against a specific, low-durability artifact — a hash, a domain, a known-bad source IP — what TERMINOLOGY.md defines as an `IOC`. The interpretation load is nearly zero: either the artifact is present or it isn't. That's also the failure mode — it stops working the instant the artifact changes, which is why an attacker who rotates infrastructure defeats it for free. This same idea — that what a detection matches on can be ranked by how much it actually costs an attacker to change it, from a trivially-rotated atomic indicator up to a tactic or procedure that's expensive to abandon — is the organizing insight behind David Bianco's "Pyramid of Pain" (Bianco, "The Pyramid of Pain," *Enterprise Detection & Response* blog, 2013), the practitioner framework most commonly used to reason about exactly this tradeoff.
 
 ### 3.2 Behavioural detection
 

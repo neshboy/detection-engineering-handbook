@@ -8,6 +8,20 @@ Deduplicated references cited across the 55 completed units, grouped by publishe
 
 - **CVE-2018-10561 / CVE-2018-10562** — GPON router authentication-bypass RCE (the real exploit path behind the honeynet's `/GponForm/diag_Form` evidence). Cited in: Part 4, Part 16 (implied via same CVE discussion), Part 26, Part 36, Part 40; Appendix A4.
 - **MITRE ATLAS** (Adversarial Threat Landscape for Artificial-Intelligence Systems) — https://atlas.mitre.org. Cited in: Part 48.
+- **MITRE ATT&CK** — "Command and Scripting Interpreter: PowerShell," Technique T1059.001: https://attack.mitre.org/techniques/T1059/001/, cited as the canonical documentation for every ATT&CK technique/sub-technique ID this book uses. Cited in: Part 2.
+- **MITRE ATT&CK** — Enterprise Matrix (tactic ordering, TA0001–TA0040): https://attack.mitre.org/matrices/enterprise/. Cited in: Part 44.
+
+### David Bianco
+
+- David Bianco, "The Pyramid of Pain," *Enterprise Detection & Response* blog, published 2013-03-01 (updated 2014-01-17): http://detect-respond.blogspot.com/2013/03/the-pyramid-of-pain.html — the originating framework for ranking detection artifacts by how costly they are for an attacker to change (atomic indicators through TTPs). Cited in: Part 1.
+
+### Lockheed Martin Corporation
+
+- Eric M. Hutchins, Michael J. Cloppert, and Rohan M. Amin, "Intelligence-Driven Computer Network Defense Informed by Analysis of Adversary Campaigns and Intrusion Kill Chains," Lockheed Martin Corporation, 2011: https://www.lockheedmartin.com/content/dam/lockheed-martin/rms/documents/cyber/LM-White-Paper-Intel-Driven-Defense.pdf — the original whitepaper introducing the "kill chain" model for cyber intrusions. Cited in: Part 44.
+
+### Association for Computing Machinery (ACM)
+
+- Stefan Axelsson, "The Base-Rate Fallacy and the Difficulty of Intrusion Detection," *ACM Transactions on Information and System Security*, Vol. 3, No. 3, August 2000, pp. 186–205: https://doi.org/10.1145/357830.357849 — the origin of the base-rate-fallacy argument for why even a low per-event false-positive rate still floods analysts, since the malicious base rate is a tiny fraction of total monitored activity. Cited in: Part 42.
 
 ### GTFOBins Project
 
